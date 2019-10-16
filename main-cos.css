@@ -1,0 +1,67 @@
+
+body {
+    margin: 0;
+    background-color: #000;
+    color: #fff;
+    font-family: Monospace;
+    font-size: 14px;
+}
+h4,p{
+    margin: 4px 4px;
+}
+
+button{
+    border-style: solid;
+    border-color: darkred;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: tan;
+    color:darkred;
+    box-sizing: border-box;
+    padding:2px 4px;
+    font-family: Monospace;
+    cursor: pointer;
+    font-weight:bold;
+}
+
+.ui{
+    position: absolute;
+    border-style: solid;
+    border-color: darkred;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: tan;
+    color:darkred;
+    box-sizing: border-box;
+}
+#cont{               
+    width:80%;
+    height:70%;
+    left:0%;
+    top:0%;
+}
+#info{
+    width:20%;
+    height:100%;
+    left:80%;
+    top:0%;
+}
+#dial{               
+    width:80%;
+    height:30%;
+    left:0%;
+    top:70%;
+}
+input{
+    width:80%;
+    /* box-sizing:border-box; */
+    background-color: tan;
+    border-color: darkred;
+    border-width: 1px;
+    color:darkred;
+    font-family: Monospace;
+    caret-color:darkred;
+    /* outline:none; */
+    margin: 4px 4px;
+    font-weight:bold;
+}
