@@ -4,7 +4,7 @@
 o 
 
 # material
-mtllib sward-left.mtl
+mtllib sword-left.mtl
 usemtl palette
 
 # normals

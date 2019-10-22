@@ -43,8 +43,8 @@
             import { Character } from './COS.js/Character.js';
             import { Accessory } from './COS.js/Accessory.js';
             import { EmptyMap,BuildField } from './COS.js/BattleField.js';
-            import config from './test.js'
-            console.log(config)
+            // import config from './test.js'
+            // console.log(config)
 
 			var container;
 			var camera, scene, renderer;
@@ -53,6 +53,9 @@
             var map,field
             var commandLine=document.getElementById("commandLine")
             var focusMan
+            var fs=require('fs')
+            // console.log(fs)
+            
 
             document.getElementById("commandButton").addEventListener(
                 'click',function(){
@@ -88,45 +91,67 @@
                 // scene.add( pointLight );
                 // pointLight.position.set(5,5,5)
 
-                // try jquery load json --------------
-                
+                // try fs load json --------------
+                var compaign
+                // fs.readFile('compaign_data.json',function(err,data){
+                //     // console.log(data.toString())
+                //     compaign=JSON.parse(data.toString())
+                //     console.log(compaign.map)
+                //     field=new BuildField(compaign.map)
+                //     scene.add(field)
+                // })
+                compaign = JSON.parse(fs.readFileSync('story/train.json'))
+                console.log(compaign)
                 
                 // build map --------------               
-                field=new BuildField(map=new EmptyMap(21,12))
+                // field=new BuildField(map=new EmptyMap(21,12))
+                field=new BuildField(compaign.map)
                 scene.add(field)
                 
                 // add characters
                 // for(var i=1;i<20;i++){
                 //     peoples.push(new Character('b',{x:i,y: 0,z:0,d:2},'Recruit-B'))
                 // }  
-
-                peoples.push(new Character('B-f1',{x:15,y: 0,z: 3,d:-1},'Recruit-B'))               
-                peoples.push(new Character('B-f2',{x:15,y: 0,z: 5,d:-1},'Recruit-B'))                
-                peoples.push(new Character('B-f3',{x:15,y: 0,z: 7,d:-1},'Recruit-B'))               
-                peoples.push(new Character('W-f1',{x: 5,y: 0,z: 3,d: 1},'Recruit-W'))
-                peoples.push(new Character('W-f2',{x: 5,y: 0,z: 5,d: 1},'Recruit-W'))
-                peoples.push(new Character('W-f3',{x: 5,y: 0,z: 7,d: 1},'Recruit-W'))
-                peoples.push(new Character('a',{x:10,y:.5,z:11,d: 2},'Admiral'))
-                // peoples[0].rotation.y=Math.PI/2
-                peoples.forEach(function(unit){
-                    scene.add(unit)
+                compaign.cha.forEach(function(doll){
+                    var cha=new Character(doll.name,doll.coor,doll.carr)
+                    peoples.push(cha)
+                    scene.add(cha)
                 })
+                // peoples.push(new Character(compaign.cha[0].name,compaign.cha[0].coor,compaign.cha[0].carr))
+                
+                // peoples.push(new Character('B-f1',{x:15,y: 0,z: 3,d:-1},'Recruit-B'))
+                // peoples.push(new Character('B-f2',{x:15,y: 0,z: 5,d:-1},'Recruit-B'))
+                // peoples.push(new Character('B-f3',{x:15,y: 0,z: 7,d:-1},'Recruit-B'))
+                // peoples.push(new Character('W-f1',{x: 5,y: 0,z: 3,d: 1},'Recruit-W'))
+                // peoples.push(new Character('W-f2',{x: 5,y: 0,z: 5,d: 1},'Recruit-W'))
+                // peoples.push(new Character('W-f3',{x: 5,y: 0,z: 7,d: 1},'Recruit-W'))
+                // peoples.push(new Character('a',{x:10,y:.5,z:11,d: 2},'Admiral'))
+                // // peoples[0].rotation.y=Math.PI/2
+                // peoples.forEach(function(unit){
+                //     scene.add(unit)
+                // })
                 // add objects
-                things.push(new Accessory('t1',{x: 0,y: 0,z: 0,d: 1},'torch'))
-                things.push(new Accessory('t2',{x: 0,y: 0,z:11,d: 1},'torch'))
-                things.push(new Accessory('t3',{x:20,y: 0,z: 0,d: 1},'torch'))
-                things.push(new Accessory('t4',{x:20,y: 0,z:11,d: 1},'torch'))
-                things.push(new Accessory('f1',{x: 4,y: 0,z: 5,d: 1},'flag-T'))
-                things.push(new Accessory('f2',{x:16,y: 0,z: 5,d: 1},'flag-D'))
-                things.push(new Accessory('p1',{x:10,y: 0,z:11,d: 1},'Parade'))
-                things.push(new Accessory('d1',{x: 5,y: 0,z:11,d: 1},'drum'))
-                things.push(new Accessory('d2',{x:15,y: 0,z:11,d: 1},'drum'))
-                things.push(new Accessory('s1',{x: 0,y: 0,z: 0,d: 1},'posiSele'))
-                things.push(new Accessory('s2',{x: 0,y: 0,z: 0,d: 1},'charSele'))
-                things.push(new Accessory('s3',{x: 0,y: 0,z: 0,d: 1},'objeSele'))
-                things.forEach(function(unit){
-                    scene.add(unit)
+                compaign.obj.forEach(function(toy){
+                    var obj=new Accessory(toy.name,toy.coor,toy.type)
+                    things.push(obj)
+                    scene.add(obj)
                 })
+                // things.push(new Accessory('t1',{x: 0,y: 0,z: 0,d: 1},'torch'))
+                // things.push(new Accessory('t2',{x: 0,y: 0,z:11,d: 1},'torch'))
+                // things.push(new Accessory('t3',{x:20,y: 0,z: 0,d: 1},'torch'))
+                // things.push(new Accessory('t4',{x:20,y: 0,z:11,d: 1},'torch'))
+                // things.push(new Accessory('f1',{x: 4,y: 0,z: 5,d: 1},'flag-T'))
+                // things.push(new Accessory('f2',{x:16,y: 0,z: 5,d: 1},'flag-D'))
+                // things.push(new Accessory('p1',{x:10,y: 0,z:11,d: 1},'Parade1'))
+                // things.push(new Accessory('d1',{x: 5,y: 0,z:11,d: 1},'drum'))
+                // things.push(new Accessory('d2',{x:15,y: 0,z:11,d: 1},'drum'))
+                // things.push(new Accessory('s1',{x: 0,y: 0,z: 0,d: 1},'posiSele'))
+                // things.push(new Accessory('s2',{x: 0,y: 0,z: 0,d: 1},'charSele'))
+                // things.push(new Accessory('s3',{x: 0,y: 0,z: 0,d: 1},'objeSele'))
+                // things.push(new Accessory('s3',{x: 4,y: 0,z: 3,d: 0},'dummy'))
+                // things.forEach(function(unit){
+                //     scene.add(unit)
+                // })
 
                 document.oncontextmenu = new Function("return false;");
                 document.getElementById('cont').addEventListener('mousedown',onMouseDrag,false)
@@ -182,7 +207,9 @@
                 //         element.doSingleCommand(event.key)
                 //     }
                 // });
+                
                 if(!focusMan){return}
+                // focusMan.traverseVisible(function(obj){console.log(obj)}) // !! look to all the obj in scene
                 focusMan.doSingleCommand(event.key)
             }
 
@@ -242,7 +269,8 @@
                 if(focusMan){
                     things.findByName('s2').position.copy(focusMan.position)  
                 }
-                             
+                    
+                
                 
                 peoples.forEach(function(element) {
                     if(element.mixer!=undefined){

@@ -154,34 +154,34 @@ var Character=( function(){
 		}		
 
 		// gears ----------------------------
-		var gearNames=['sward-right','sward-left']
+		var gearNames=['sword-right','sword-left']
 		var gearBinds=['53','43']
 		trunk.gears=[]
 		new MTLLoader()
 			.setPath( './gears/' )
-			.load( 'sward-right.mtl', function ( materials ) {
+			.load( 'sword-right.mtl', function ( materials ) {
 				materials.preload();
 				new OBJLoader()
 					.setMaterials( materials )
 					.setPath( './gears/' )
-					.load( 'sward-right.obj', function ( object ) {
+					.load( 'sword-right.obj', function ( object ) {
 						object.rotateX(Math.PI/2)
-						trunk.gears['sward-right']=object
+						trunk.gears['sword-right']=object
 						trunk.getObjectByName('Bone-53').add(object);
 					});
 
 			});
 		new MTLLoader()
 			.setPath( './gears/' )
-			.load( 'sward-left.mtl', function ( materials ) {
+			.load( 'sword-left.mtl', function ( materials ) {
 				materials.preload();
 				new OBJLoader()
 					.setMaterials( materials )
 					.setPath( './gears/' )
-					.load( 'sward-left.obj', function ( object ) {
+					.load( 'sword-left.obj', function ( object ) {
 						object.rotateX(Math.PI/2)
-						trunk.gears['sward-left']=object
-						trunk.gears['sward-left'].visible=false
+						trunk.gears['sword-left']=object
+						trunk.gears['sword-left'].visible=false
 						trunk.getObjectByName('Bone-43').add(object);
 					});
 
@@ -214,10 +214,10 @@ var Character=( function(){
 				}
 				if(command=='s'){
 					alter.todo('salute',1)
-					alter.puts('sward-right')
-					alter.take('sward-left')
-					alter.take('sward-right',1)
-					alter.puts('sward-left',1)
+					alter.puts('sword-right')
+					alter.take('sword-left')
+					alter.take('sword-right',1)
+					alter.puts('sword-left',1)
 				}
 				if(command=='d'){
 					alter.todo('trig',1)

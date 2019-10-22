@@ -19,8 +19,8 @@ var BuildField=( function(){
 	function BuildField(map){
         var addTile = function(i,j,type,Field){
             var name=''
-            if(type==0){name='soil'}
-            if(type==1){name='water'}
+            if(type==1){name='soil'}
+            if(type==2){name='water'}
             new MTLLoader()
             .setPath( './tiles/' )
             .load( name+'.mtl', function ( materials ) {
@@ -43,9 +43,12 @@ var BuildField=( function(){
 
         var Field = new THREE.Group()
 
-        for(var j=0;j<map[0].length;j++){
-            for(var i=0;i<map.length;i++){
-                addTile(i,j,map[i][j],Field)
+        // for(var j=0;j<map[0].length;j++){
+        //     for(var i=0;i<map.length;i++){
+        for(var j=0;j<map.length;j++){
+            for(var i=0;i<map[0].length;i++){
+                // addTile(i,j,map[i][j],Field)
+                addTile(i,j,map[j][i],Field)
             }
         }
 		return Field
