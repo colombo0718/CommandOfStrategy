@@ -24,10 +24,7 @@
         {"name":"f2","coor":{"x":16,"y":0,"z": 5,"d":1},"type":"flag-D"},
         {"name":"p1","coor":{"x":10,"y":0,"z":11,"d":1},"type":"Parade1"},
         {"name":"d1","coor":{"x": 5,"y":0,"z":11,"d":1},"type":"drum"},
-        {"name":"d2","coor":{"x":15,"y":0,"z":11,"d":1},"type":"drum"},
-        {"name":"s1","coor":{"x": 0,"y":0,"z": 0,"d":1},"type":"posiSele"},
-        {"name":"s2","coor":{"x": 0,"y":0,"z": 0,"d":1},"type":"charSele"},
-        {"name":"s3","coor":{"x": 0,"y":0,"z": 0,"d":1},"type":"objeSele"}
+        {"name":"d2","coor":{"x":15,"y":0,"z":11,"d":1},"type":"drum"}
     ],
     "cha":[
         {"name":"B-f1","coor":{"x":15,"y":0,"z":3,"d":-1},"carr":"Recruit-B"},

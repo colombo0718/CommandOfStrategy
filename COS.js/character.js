@@ -6,12 +6,15 @@ import { BVHLoader } from './three.js/BVHLoader.js';
 var Character=( function(){
 	// console.log(Group)
 	function Character(name,position,career){
-		var trunk= new THREE.Group(); 
+		var trunk= new THREE.Group();
+		var fs=require('fs') 
 		trunk.name=name
 		trunk.position.set(position.x,position.y,position.z)
 		trunk.direction=position.d
 		trunk.career=career
 		trunk.control=false	
+		
+		console.log(JSON.parse(fs.readFileSync('./COS.js/career.json')))
 
 		new BVHLoader()
 			.setPath( './actis/' )
@@ -55,7 +58,8 @@ var Character=( function(){
 
 				});
 		})
-
+		// set parameter
+		
 		// moves ------------------
 		trunk.move=function(name,delay){
 			var alter=this
@@ -154,17 +158,19 @@ var Character=( function(){
 		}		
 
 		// gears ----------------------------
-		var gearNames=['sword-right','sword-left']
-		var gearBinds=['53','43']
+		var gearNames=['sword-right','sword-left',"dagaxe"]
+		var gearBinds=['53','43','53']
 		trunk.gears=[]
 		new MTLLoader()
 			.setPath( './gears/' )
 			.load( 'sword-right.mtl', function ( materials ) {
+			// .load( 'dagaxe.mtl', function ( materials ) {
 				materials.preload();
 				new OBJLoader()
 					.setMaterials( materials )
 					.setPath( './gears/' )
 					.load( 'sword-right.obj', function ( object ) {
+						// .load( 'dagaxe.obj', function ( object ) {
 						object.rotateX(Math.PI/2)
 						trunk.gears['sword-right']=object
 						trunk.getObjectByName('Bone-53').add(object);

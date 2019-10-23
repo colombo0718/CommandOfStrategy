@@ -1,0 +1,7 @@
+{
+    "Recruit":{
+        "health":10,
+        "stamina":10,
+        "weight":2
+    }
+}

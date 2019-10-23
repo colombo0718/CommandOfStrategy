@@ -49,10 +49,10 @@
 			var container;
 			var camera, scene, renderer;
             var clock = new THREE.Clock();
-            var peoples=[],things=[]
+            var peoples=[],things=[],selectors=[]
             var map,field
             var commandLine=document.getElementById("commandLine")
-            var focusMan
+            var focusMan,focusObj
             var fs=require('fs')
             // console.log(fs)
             
@@ -153,6 +153,24 @@
                 //     scene.add(unit)
                 // })
 
+                // add selectors
+                selectors[0]=new Accessory('s0',{x: 0,y: 0,z: 0,d: 1},'posiSele')
+                scene.add(selectors[0])
+                selectors[1]=new Accessory('s1',{x: 0,y: 0,z: 0,d: 1},'charSele')
+                scene.add(selectors[1])
+                selectors[2]=new Accessory('s2',{x: 0,y: 0,z: 0,d: 1},'objeSele')
+                scene.add(selectors[2])
+
+                var geometry = new THREE.BoxGeometry( .05, 1, .05 );
+                var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+                var cube = new THREE.Mesh( geometry, material );
+                var cube1 = new THREE.Mesh( geometry, material );
+                cube.position.set(.6,.5,.6)
+                scene.add( cube );
+                cube1=cube.clone()
+                cube1.position.set(.6,.5,.7)
+                scene.add( cube1 );
+
                 document.oncontextmenu = new Function("return false;");
                 document.getElementById('cont').addEventListener('mousedown',onMouseDrag,false)
                 document.getElementById('cont').addEventListener('mousemove',onMouseDrag,false)
@@ -184,13 +202,15 @@
 
                 var intersects = raycaster.intersectObjects( field.children )
                 if(intersects.length==1){
-                    things.findByName('s1').position.copy(intersects[0].object.position)
+                    selectors[0].position.copy(intersects[0].object.position)
                 }
                 
                 if(event.which==1){
-                    if(peoples.findByPosition(things.findByName('s1').position)){
-                        focusMan=peoples.findByPosition(things.findByName('s1').position)
-                        // things.findByName('s2').position.copy(focusMan.position)
+                    if(peoples.findByPosition(selectors[0].position)){
+                        focusMan=peoples.findByPosition(selectors[0].position)
+                    }
+                    if(things.findByPosition(selectors[0].position)){
+                        focusObj=things.findByPosition(selectors[0].position)
                     }
                 }
             }
@@ -251,6 +271,14 @@
                 return selectObj
             }
 
+            things.findByPosition=function(position){
+                var selectObj
+                this.forEach(function(obj){
+                    if(obj.position.equals(position)){selectObj=obj}
+                });
+                return selectObj
+            }
+
 
 			function animate() {				
                 var delta = clock.getDelta();
@@ -267,7 +295,10 @@
 			function render() {        
                 renderer.render( scene, camera );
                 if(focusMan){
-                    things.findByName('s2').position.copy(focusMan.position)  
+                    selectors[1].position.copy(focusMan.position)  
+                }
+                if(focusObj){
+                    selectors[2].position.copy(focusObj.position)  
                 }
                     
                 
@@ -275,7 +306,7 @@
                 peoples.forEach(function(element) {
                     if(element.mixer!=undefined){
                         if(!element.control && element.name!="a"){                        
-                            element.todo('sway')
+                            element.todo('base')
                         }
                         if(!element.control && element.name=="a"){
                             element.todo('sits')
