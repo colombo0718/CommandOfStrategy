@@ -49,7 +49,7 @@
 			var container;
 			var camera, scene, renderer;
             var clock = new THREE.Clock();
-            var peoples=[],things=[],selectors=[]
+            var peoples=[],things=[],selectors=[],marks=[]
             var map,field
             var commandLine=document.getElementById("commandLine")
             var focusMan,focusObj
@@ -100,8 +100,9 @@
                 //     field=new BuildField(compaign.map)
                 //     scene.add(field)
                 // })
+                // compaign = JSON.parse(fs.readFileSync('story/basic.json'))
                 compaign = JSON.parse(fs.readFileSync('story/train.json'))
-                console.log(compaign)
+                // console.log(compaign)
                 
                 // build map --------------               
                 // field=new BuildField(map=new EmptyMap(21,12))
@@ -114,8 +115,10 @@
                 // }  
                 compaign.cha.forEach(function(doll){
                     var cha=new Character(doll.name,doll.coor,doll.carr)
+                    cha.showMarks()
                     peoples.push(cha)
                     scene.add(cha)
+                    scene.add(cha.markSpace)
                 })
                 // peoples.push(new Character(compaign.cha[0].name,compaign.cha[0].coor,compaign.cha[0].carr))
                 
@@ -161,15 +164,16 @@
                 selectors[2]=new Accessory('s2',{x: 0,y: 0,z: 0,d: 1},'objeSele')
                 scene.add(selectors[2])
 
-                var geometry = new THREE.BoxGeometry( .05, 1, .05 );
-                var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-                var cube = new THREE.Mesh( geometry, material );
-                var cube1 = new THREE.Mesh( geometry, material );
-                cube.position.set(.6,.5,.6)
-                scene.add( cube );
-                cube1=cube.clone()
-                cube1.position.set(.6,.5,.7)
-                scene.add( cube1 );
+                // var geometry = new THREE.BoxGeometry(.1,1,.1);
+                // var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+                // var cube = new THREE.Mesh( geometry, material );
+                // var cube1 = new THREE.Mesh( geometry, material );
+                // cube.position.set(2.6,.5,2.6)
+                // scene.add( cube );
+                // console.log(cube)
+                
+                // var flag=new Accessory('f1',{x: 2.6,y: 0,z: 2.6,d: 0},'littleflag')
+                // scene.add( flag );
 
                 document.oncontextmenu = new Function("return false;");
                 document.getElementById('cont').addEventListener('mousedown',onMouseDrag,false)
@@ -177,7 +181,7 @@
                 document.getElementById('cont').addEventListener('wheel',onMouseDrag,false)
                 window.addEventListener('resize',onWindowResize,false)
                 
-                document.addEventListener('keypress',onKeyPress,false)
+                document.addEventListener('keyup',onKeyPress,false)
             }
 
             function onMouseDrag(event){
@@ -227,7 +231,13 @@
                 //         element.doSingleCommand(event.key)
                 //     }
                 // });
-                
+                console.log(event.key)
+                if(event.key=="m"){
+                    peoples.forEach(function(man){
+                        man.showMarks()
+                    })
+                }
+
                 if(!focusMan){return}
                 // focusMan.traverseVisible(function(obj){console.log(obj)}) // !! look to all the obj in scene
                 focusMan.doSingleCommand(event.key)
@@ -279,6 +289,25 @@
                 return selectObj
             }
 
+            // var rePlotMarks=function(peoples,things){
+            //     marks.forEach(function(sign){
+            //         scene.remove(sign)
+            //     })
+            //     // console.log(peoples)
+            //     peoples.forEach(function(man){
+            //         console.log(man.position,man.health)
+            //         var x=man.position.x
+            //         var y=man.position.y
+            //         var z=man.position.z
+            //         var geometry = new THREE.BoxGeometry(.1,.5,.1);
+            //         var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+            //         var cube = new THREE.Mesh( geometry, material );
+            //         cube.position.set(x-.4,y+.5,z-.4)
+            //         scene.add( cube );
+            //         marks.push(cube)
+            //     })
+            // }
+
 
 			function animate() {				
                 var delta = clock.getDelta();
@@ -298,12 +327,15 @@
                     selectors[1].position.copy(focusMan.position)  
                 }
                 if(focusObj){
-                    selectors[2].position.copy(focusObj.position)  
+                    selectors[2].position.copy(focusObj.position) 
                 }
-                    
                 
+                // rePlotMarks(peoples,things)  
+                // console.log(peoples[0])
                 
                 peoples.forEach(function(element) {
+                    // element.showMarks()
+                    // console.log(element.health)
                     if(element.mixer!=undefined){
                         if(!element.control && element.name!="a"){                        
                             element.todo('base')

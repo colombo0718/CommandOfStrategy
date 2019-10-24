@@ -14,7 +14,7 @@ var Character=( function(){
 		trunk.career=career
 		trunk.control=false	
 		
-		console.log(JSON.parse(fs.readFileSync('./COS.js/career.json')))
+		var data=JSON.parse(fs.readFileSync('./COS.js/career.json'))
 
 		new BVHLoader()
 			.setPath( './actis/' )
@@ -58,8 +58,83 @@ var Character=( function(){
 
 				});
 		})
-		// set parameter
-		
+		// set parameters and Marks
+
+		data.setting.forEach(function(parameter){
+			if(career==parameter.career){
+				trunk.health=parameter.health
+				trunk.health=7//parameter.health
+				trunk.stamina=parameter.stamina
+				trunk.weight=parameter.weight
+			}
+		})
+		// trunk.health=data.Recruit.health
+		trunk.markSpace=new THREE.Group()
+			// add blood stick
+		var geometry = new THREE.BoxGeometry(.05,1,.05);
+		var material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
+		var cube = new THREE.Mesh( geometry, material );
+		cube.position.set(-.4,.5,.4)
+		trunk.markSpace.blood=cube
+		trunk.markSpace.add(cube);
+			// add stamina flags
+		new MTLLoader()
+			.setPath( './goods/' )
+			.load( 'walkflag.mtl', function ( materials ) {
+				materials.preload();
+				new OBJLoader()
+					.setMaterials( materials )
+					.setPath( './goods/' )
+					.load( 'walkflag.obj', function ( object ) {
+						object.scale.set(.25,.25,.25)
+						object.position.set(-.4,0,.4)
+						// object.position.set(0,0,0)
+						trunk.markSpace.gflag=object
+						trunk.markSpace.add(object);
+					});
+
+			});
+
+		new MTLLoader()
+			.setPath( './goods/' )
+			.load( 'stopflag.mtl', function ( materials ) {
+				materials.preload();
+				new OBJLoader()
+					.setMaterials( materials )
+					.setPath( './goods/' )
+					.load( 'stopflag.obj', function ( object ) {
+						object.scale.set(.25,.25,.25)
+						object.position.set(-.4,0,.4)
+						object.visible=false
+						trunk.markSpace.rflag=object
+						trunk.markSpace.add(object);
+					});
+
+			});
+
+		trunk.showMarks=function(){
+			this.markSpace.visible=true
+			this.markSpace.position.copy(this.position)
+
+			this.markSpace.remove(trunk.markSpace.blood)
+			var geometry = new THREE.BoxGeometry(.05,this.health/10,.05);
+			var bloodcolor=0x0000ff
+			if(this.health<8){bloodcolor=0x00ff00}
+			if(this.health<5){bloodcolor=0xffff00}
+			if(this.health<3){bloodcolor=0xff0000}
+			var material = new THREE.MeshBasicMaterial( {color: bloodcolor} );
+			var cube = new THREE.Mesh( geometry, material );
+			cube.position.set(-.4,1-this.health/20,.4)
+			this.markSpace.blood=cube
+			this.markSpace.add(cube);
+
+		}
+
+		trunk.hideMarks=function(){
+			this.markSpace.visible=false
+		}
+		// console.log(trunk.markSpace.visible=false)
+
 		// moves ------------------
 		trunk.move=function(name,delay){
 			var alter=this
@@ -109,13 +184,19 @@ var Character=( function(){
 			if(name!='sway'){alter.actions[name].setEffectiveWeight(0).reset()}
 			alter.actions[name].setEffectiveWeight(1).play()
 			alter.doing=name
+			// alter.hideMarks()
 			
 			if(keep && keep!=0){
 				alter.control=true
 				setTimeout(function(){
+					// alter.showMarks()
 					alter.control=false
 				},keep*1000)
 			}
+
+			setTimeout(function(){
+				alter.showMarks()
+			},keep*1100)
 		}
 
 		// effects ---------------------------

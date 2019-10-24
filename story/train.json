@@ -24,6 +24,7 @@
         {"name":"b1","coor":{"x": 5,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"}
     ],
     "cha":[
-        {"name":"B-f1","coor":{"x":1,"y":0,"z":1,"d": 1},"carr":"Recruit-B"}
+        {"name":"B-f1","coor":{"x":5,"y":0,"z":1,"d":-1},"carr":"Recruit-B"},
+        {"name":"W-f1","coor":{"x":1,"y":0,"z":1,"d":1},"carr":"Recruit-W"}
     ]   
 }
