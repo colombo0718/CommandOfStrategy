@@ -115,6 +115,8 @@
                 // }  
                 compaign.cha.forEach(function(doll){
                     var cha=new Character(doll.name,doll.coor,doll.carr)
+                    // console.log(cha.todo(),cha.defaultAction)
+
                     cha.showMarks()
                     peoples.push(cha)
                     scene.add(cha)
@@ -231,16 +233,27 @@
                 //         element.doSingleCommand(event.key)
                 //     }
                 // });
-                console.log(event.key)
-                if(event.key=="m"){
-                    peoples.forEach(function(man){
-                        man.showMarks()
-                    })
-                }
+                // console.log(event.key)
+                // if(event.key=="m"){
+                //     peoples.forEach(function(man){
+                //         man.showMarks()
+                //     })
+                // }
 
-                if(!focusMan){return}
-                // focusMan.traverseVisible(function(obj){console.log(obj)}) // !! look to all the obj in scene
-                focusMan.doSingleCommand(event.key)
+                if(focusMan){
+                    var a=focusMan.doSingleCommand(event.key,function(operators){
+                        console.log(operators)
+                    })
+                    if(a){
+                        a.forEach(function(oper){
+                            console.log(oper.position)
+                        })
+                    }
+                }
+                
+                // focusMan.doSingleCommand(event.key,function(operate){
+                //     console.log(operate)z
+                // })
             }
 
             // function selectPeopleByName(name){
@@ -334,15 +347,16 @@
                 // console.log(peoples[0])
                 
                 peoples.forEach(function(element) {
+
                     // element.showMarks()
-                    // console.log(element.health)
+                    // console.log(element.actions[element.doing])
                     if(element.mixer!=undefined){
-                        if(!element.control && element.name!="a"){                        
-                            element.todo('base')
-                        }
-                        if(!element.control && element.name=="a"){
-                            element.todo('sits')
-                        }
+                        // if(!element.control && element.name!="a"){                        
+                        //     element.todo('base')
+                        // }
+                        // if(!element.control && element.name=="a"){
+                        //     element.todo('sits')
+                        // }
                         // if(!element.control && element.name=="W-f1"){
                         //     element.todo('sway')
                         // }

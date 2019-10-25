@@ -4,13 +4,51 @@
             "career":"Recruit-B",
             "health":10,
             "stamina":10,
-            "weight":2
+            "weight":2,
+            "skills":[
+                {"name":"hack",
+                    "operator":[
+                        {"position":{"x": 0,"y":0,"z": 1,"d":0},"health":-1}
+                    ]
+                },
+                {"name":"swep",
+                    "operator":[
+                        {"position":{"x": 1,"y":0,"z": 1,"d":0},"health":-1},
+                        {"position":{"x": 0,"y":0,"z": 1,"d":0},"health":-1},
+                        {"position":{"x":-1,"y":0,"z": 1,"d":0},"health":-1}
+                    ]
+                },
+                {"name":"spur",
+                    "operator":[
+                        {"position":{"x": 0,"y":0,"z": 1,"d":0},"health":-1}
+                    ]
+                }
+            ]
         },
         {
             "career":"Recruit-W",
             "health":10,
             "stamina":10,
-            "weight":2
+            "weight":2,
+            "skills":[
+                {"name":"hack",
+                    "operator":[
+                        {"position":{"x": 0,"y":0,"z": 1,"d":0},"health":-1}
+                    ]
+                },
+                {"name":"swep",
+                    "operator":[
+                        {"position":{"x": 1,"y":0,"z": 1,"d":0},"health":-1},
+                        {"position":{"x": 0,"y":0,"z": 1,"d":0},"health":-1},
+                        {"position":{"x":-1,"y":0,"z": 1,"d":0},"health":-1}
+                    ]
+                },
+                {"name":"spur",
+                    "operator":[
+                        {"position":{"x": 0,"y":0,"z": 1,"d":0},"health":-1}
+                    ]
+                }
+            ]
         },
         {
             "career":"sword",
@@ -20,12 +58,6 @@
         },
         {
             "career":"Bow",
-            "health":10,
-            "stamina":10,
-            "weight":2
-        },
-        {
-            "career":"Long",
             "health":10,
             "stamina":10,
             "weight":2
