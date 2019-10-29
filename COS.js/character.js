@@ -19,7 +19,7 @@ var Character=( function(){
 		var data=JSON.parse(fs.readFileSync('./COS.js/career.json'))
 
 		new BVHLoader()
-			.setPath( './actis/' )
+			.setPath( './actis/male/' )
 			.load( "male_base.bvh", function ( result ) {
 				// ra=result
 				// console.log(result )
@@ -186,7 +186,7 @@ var Character=( function(){
 		trunk.actions=[]
 		actionNames.forEach(function(name){
 			new BVHLoader()
-				.setPath( './actis/' )
+				.setPath( './actis/male/' )
 				.load( 'male_'+name+'.bvh', function ( result ) {
 					trunk.mixer.clipAction( result.clip ).name=name	
 					trunk.actions[name]=trunk.mixer.clipAction( result.clip )

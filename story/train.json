@@ -21,7 +21,8 @@
         {"name":"b1","coor":{"x": 2,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"},
         {"name":"b1","coor":{"x": 3,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"},
         {"name":"b1","coor":{"x": 4,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"},
-        {"name":"b1","coor":{"x": 5,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"}
+        {"name":"b1","coor":{"x": 5,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"},
+        {"name":"h1","coor":{"x": 3,"y":0,"z": 1,"d":1},"type":"horse"}
     ],
     "cha":[
         {"name":"B-f1","coor":{"x":5,"y":0,"z":1,"d":-1},"carr":"Recruit-B"},
