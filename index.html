@@ -49,7 +49,7 @@
 			var container;
 			var camera, scene, renderer;
             var clock = new THREE.Clock();
-            var peoples=[],things=[],selectors=[],marks=[]
+            var peoples=[],things=[],selectors=[]//,marks=[]
             var map,field
             var commandLine=document.getElementById("commandLine")
             var focusMan,focusObj
@@ -114,7 +114,7 @@
                 //     peoples.push(new Character('b',{x:i,y: 0,z:0,d:2},'Recruit-B'))
                 // }  
                 compaign.cha.forEach(function(doll){
-                    var cha=new Character(doll.name,doll.coor,doll.carr)
+                    var cha=new Character(doll.name,doll.position,doll.carr,doll.camp)
                     // console.log(cha.todo(),cha.defaultAction)
 
                     cha.showMarks()
@@ -137,7 +137,7 @@
                 // })
                 // add objects
                 compaign.obj.forEach(function(toy){
-                    var obj=new Accessory(toy.name,toy.coor,toy.type)
+                    var obj=new Accessory(toy.name,toy.position,toy.type)
                     things.push(obj)
                     scene.add(obj)
                 })
@@ -187,7 +187,7 @@
             }
 
             function onMouseDrag(event){
-                if(event.deltaY>0 && camera.position.y<20){
+                if(event.deltaY>0 && camera.position.y<30){
                     camera.position.y+=1
                     camera.position.z-=1
                 }

@@ -4,41 +4,39 @@ import { OBJLoader } from './three.js/OBJLoader.js';
 import { BVHLoader } from './three.js/BVHLoader.js';
 
 var Character=( function(){
-	// console.log(Group)
-	function Character(name,position,career){
+	function Character(name,position,career,camp){
 		var trunk= new THREE.Group();
-		var fs=require('fs') 
+		// set parameter from call function
 		trunk.name=name
-		// trunk.position.set(position.x,position.y,position.z)
 		trunk.position.copy(position)
 		trunk.direction=position.d
 		trunk.position.d=position.d
 		trunk.career=career
-		trunk.control=false	
-		
-		var data=JSON.parse(fs.readFileSync('./COS.js/career.json'))
+		trunk.camp=camp
+		trunk.control=false 
+		// set default parameter from document
+		var fs=require('fs') 
+		var data=JSON.parse(fs.readFileSync('./career/'+trunk.career+'.json'))
+		trunk.health=data.health
+		trunk.health=data.health
+		trunk.stamina=data.stamina
+		trunk.weight=data.weight
+		trunk.signs=data.signs
+		// show file in directory 
+		fs.readdir("./career/",function(err,files){console.log(files)})
 
+
+		// load skeleton
 		new BVHLoader()
 			.setPath( './actis/male/' )
 			.load( "male_base.bvh", function ( result ) {
-				// ra=result
-				// console.log(result )
 				trunk.skeletonHelper = new THREE.SkeletonHelper( result.skeleton.bones[ 0 ] );
 				trunk.skeletonHelper.skeleton = result.skeleton; 
 				trunk.mixer = new THREE.AnimationMixer( trunk.skeletonHelper );
-				// console.log(trunk.mixer)
 				trunk.scale.set(.25,.25,.25)
 				trunk.add( result.skeleton.bones[ 0 ] );
 				trunk.rotateY( Math.PI/2*position.d%4)
 				trunk.rotateX(-Math.PI/2)
-				// scene.add( skeletonHelper );
-				// scene.add( this );
-				// console.log(trunk.mixer)
-				// console.log(trunk.mixer.clipAction( result.clip ).setEffectiveWeight(1).play().setLoop( THREE.LoopOnce ));
-				// console.log(trunk.mixer.clipAction( result.clip ))
-				// console.log(trunk.mixer)
-				// trunk.mixer.addEventListener( 'loop', function( e ) {console.log(e.action.paused=true)} )
-				// trunk.mixer.clipAction( result.clip ).play()
 			} );
 
 		// bones bind trunk -------------------
@@ -59,26 +57,11 @@ var Character=( function(){
 						});
 				});
 		})
-		// set parameters and Marks
 
-		data.setting.forEach(function(parameter){
-			if(career==parameter.career){
-				trunk.health=parameter.health
-				trunk.health=7//parameter.health
-				trunk.stamina=parameter.stamina
-				trunk.weight=parameter.weight
-			}
-		})
-		// trunk.health=data.Recruit.health
+
+		// build MarkSpace and Marks
 		trunk.markSpace=new THREE.Group()
 			// add blood stick
-		var geometry = new THREE.BoxGeometry(.05,1,.05);
-		var material = new THREE.MeshBasicMaterial( {color: 0x0000ff} );
-		var cube = new THREE.Mesh( geometry, material );
-		cube.position.set(-.4,.5,.4)
-		trunk.markSpace.blood=cube
-		trunk.markSpace.add(cube);
-			// add stamina flags
 		new MTLLoader()
 			.setPath( './goods/' )
 			.load( 'walkflag.mtl', function ( materials ) {
@@ -87,6 +70,7 @@ var Character=( function(){
 					.setMaterials( materials )
 					.setPath( './goods/' )
 					.load( 'walkflag.obj', function ( object ) {
+						// console.log(object.children[0].material.color.set(0x000000))
 						object.scale.set(.25,.25,.25)
 						object.position.set(-.4,0,.4)
 						// object.position.set(0,0,0)
@@ -139,47 +123,71 @@ var Character=( function(){
 					this.markSpace.rflag.visible=true
 				}
 			}
-			
-
 		}
 
 		trunk.hideMarks=function(){
 			this.markSpace.visible=false
 		}
-		// console.log(trunk.markSpace.visible=false)
 
+		// add character camp signs ----------
+		var campcolor=0xffffff
+		if(trunk.camp=="R"){campcolor=0xff0000}
+		if(trunk.camp=="G"){campcolor=0x00ff00}
+		if(trunk.camp=="B"){campcolor=0x0000ff}
+		if(trunk.camp=="W"){campcolor=0xffffff}
+		if(trunk.camp=="M"){campcolor=0xff00ff}
+		if(trunk.camp=="Y"){campcolor=0xffff00}
+		if(trunk.camp=="C"){campcolor=0x00ffff}
+		if(trunk.camp=="K"){campcolor=0x000000}
+		// on head
+		new OBJLoader()
+			.setPath( './dolls/signs/' )
+			.load(trunk.signs[0]+'.obj', function ( object ) {
+				object.children[0].material.color.set(campcolor)
+				object.rotateX(Math.PI/2)
+				trunk.getObjectByName('Bone-30').add(object);
+			});
+		// on shoulder
+		new OBJLoader()
+			.setPath( './dolls/signs/' )
+			.load( trunk.signs[1]+'.obj', function ( object ) {
+				object.children[0].material.color.set(campcolor)
+				object.rotateX(Math.PI/2)
+				trunk.getObjectByName('Bone-10').add(object);
+			});
+				
 		// moves ------------------
 		trunk.move=function(name,delay){
 			var alter=this
 			if(!delay){delay=0}
-			alter.direction=alter.direction%4
-			if(alter.direction<0){alter.direction+=4}
+			alter.position.d=alter.position.d%4
+			if(alter.position.d<0){alter.position.d+=4}
 			setTimeout(function(){
 				switch(name){
 					case "forward":
 						// console.log(this)
-						if(alter.direction==0){alter.position.z+=1}
-						if(alter.direction==1){alter.position.x+=1}
-						if(alter.direction==2){alter.position.z-=1}
-						if(alter.direction==3){alter.position.x-=1}
+						if(alter.position.d==0){alter.position.z+=1}
+						if(alter.position.d==1){alter.position.x+=1}
+						if(alter.position.d==2){alter.position.z-=1}
+						if(alter.position.d==3){alter.position.x-=1}
 						break;
-					case "turn right":
+					case "turnRigh":
 						alter.rotateZ(-Math.PI/2)
-						alter.direction-=1
-						alter.direction=alter.direction%4
+						alter.position.d-=1
+						alter.position.d=alter.position.d%4
 						break;
-					case "turn left":
+					case "turnLeft":
 						alter.rotateZ(Math.PI/2)
-						alter.direction+=1
-						alter.direction=alter.direction%4
+						alter.position.d+=1
+						alter.position.d=alter.position.d%4
 						break;
 				}
-				alter.position.d=alter.direction
+				// alter.position.d=alter.position.d
 			},delay*1000)
 		}
 
 		// actions ------------
-		var actionNames=['base','sway','walk','hack','sits','tlef','trig','swep','spur','salute']
+		var actionNames=['base','sway','walk','hack','sits','turnLeft','turnRigh','swep','spur','salute']
 
 		trunk.defaultAction="base"
 
@@ -231,17 +239,15 @@ var Character=( function(){
 			var alter=this
 			var relative
 			var absolute=[]
-			data.setting.forEach(function(parameter){
-				if(career==parameter.career){
-					parameter.skills.forEach(function(ss){
-						if(ss.name==skillname){
-							relative=ss.operator
-							// console.log(ss.operator[0].position)
-						}
-						
-					})
+			
+			data.skills.forEach(function(ss){
+				if(ss.name==skillname){
+					relative=ss.operator
+					// console.log(ss.operator[0].position)
 				}
+				
 			})
+
 			alter.position.d=alter.position.d%4
 			if(alter.position.d<0){alter.position.d+=4}
 			relative.forEach(function(oper){
@@ -366,18 +372,14 @@ var Character=( function(){
 				}
 				if(command=='s'){
 					alter.todo('salute',1)
-					// alter.puts('sword-right')
-					// alter.take('sword-left')
-					// alter.take('sword-right',1)
-					// alter.puts('sword-left',1)
 				}
 				if(command=='d'){
-					alter.todo('trig',1)
-					alter.move('turn right',1)
+					alter.todo('turnRigh',1)
+					alter.move('turnRigh',1)
 				}
 				if(command=='a'){
-					alter.todo('tlef',1)
-					alter.move('turn left',1)
+					alter.todo('turnLeft',1)
+					alter.move('turnLeft',1)
 				}
 				if(command=='x'){
 					alter.todo('hack',1)

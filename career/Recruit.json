@@ -1,0 +1,32 @@
+{
+    "career":"Recruit",
+    "health":10,
+    "stamina":10,
+    "weight":2,
+    "signs":["headband","scarf"],
+    "orders":[
+        {"key":"w","action":"walk"},
+        {"key":"a","action":"turnLeft"},
+        {"key":"d","action":"turnRigh"},
+        {"key":"x","action":"hack"}
+    ],
+    "skills":[
+        {"name":"hack",
+            "operator":[
+                {"position":{"x": 0,"y":0,"z": 1,"d":0},"health":-1}
+            ]
+        },
+        {"name":"swep",
+            "operator":[
+                {"position":{"x": 1,"y":0,"z": 1,"d":0},"health":-1},
+                {"position":{"x": 0,"y":0,"z": 1,"d":0},"health":-1},
+                {"position":{"x":-1,"y":0,"z": 1,"d":0},"health":-1}
+            ]
+        },
+        {"name":"spur",
+            "operator":[
+                {"position":{"x": 0,"y":0,"z": 1,"d":0},"health":-1}
+            ]
+        }
+    ]
+}
