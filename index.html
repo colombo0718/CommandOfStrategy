@@ -93,70 +93,26 @@
 
                 // try fs load json --------------
                 var compaign
-                // fs.readFile('compaign_data.json',function(err,data){
-                //     // console.log(data.toString())
-                //     compaign=JSON.parse(data.toString())
-                //     console.log(compaign.map)
-                //     field=new BuildField(compaign.map)
-                //     scene.add(field)
-                // })
-                // compaign = JSON.parse(fs.readFileSync('story/basic.json'))
                 compaign = JSON.parse(fs.readFileSync('story/train.json'))
-                // console.log(compaign)
-                
-                // build map --------------               
-                // field=new BuildField(map=new EmptyMap(21,12))
+                // build field --------------               
                 field=new BuildField(compaign.map)
                 scene.add(field)
                 
-                // add characters
-                // for(var i=1;i<20;i++){
-                //     peoples.push(new Character('b',{x:i,y: 0,z:0,d:2},'Recruit-B'))
-                // }  
+                // add characters from document
                 compaign.cha.forEach(function(doll){
                     var cha=new Character(doll.name,doll.position,doll.carr,doll.camp)
-                    // console.log(cha.todo(),cha.defaultAction)
-
                     cha.showMarks()
                     peoples.push(cha)
                     scene.add(cha)
                     scene.add(cha.markSpace)
                 })
-                // peoples.push(new Character(compaign.cha[0].name,compaign.cha[0].coor,compaign.cha[0].carr))
-                
-                // peoples.push(new Character('B-f1',{x:15,y: 0,z: 3,d:-1},'Recruit-B'))
-                // peoples.push(new Character('B-f2',{x:15,y: 0,z: 5,d:-1},'Recruit-B'))
-                // peoples.push(new Character('B-f3',{x:15,y: 0,z: 7,d:-1},'Recruit-B'))
-                // peoples.push(new Character('W-f1',{x: 5,y: 0,z: 3,d: 1},'Recruit-W'))
-                // peoples.push(new Character('W-f2',{x: 5,y: 0,z: 5,d: 1},'Recruit-W'))
-                // peoples.push(new Character('W-f3',{x: 5,y: 0,z: 7,d: 1},'Recruit-W'))
-                // peoples.push(new Character('a',{x:10,y:.5,z:11,d: 2},'Admiral'))
-                // // peoples[0].rotation.y=Math.PI/2
-                // peoples.forEach(function(unit){
-                //     scene.add(unit)
-                // })
-                // add objects
+    
+                // add objects from document
                 compaign.obj.forEach(function(toy){
                     var obj=new Accessory(toy.name,toy.position,toy.type)
                     things.push(obj)
                     scene.add(obj)
-                })
-                // things.push(new Accessory('t1',{x: 0,y: 0,z: 0,d: 1},'torch'))
-                // things.push(new Accessory('t2',{x: 0,y: 0,z:11,d: 1},'torch'))
-                // things.push(new Accessory('t3',{x:20,y: 0,z: 0,d: 1},'torch'))
-                // things.push(new Accessory('t4',{x:20,y: 0,z:11,d: 1},'torch'))
-                // things.push(new Accessory('f1',{x: 4,y: 0,z: 5,d: 1},'flag-T'))
-                // things.push(new Accessory('f2',{x:16,y: 0,z: 5,d: 1},'flag-D'))
-                // things.push(new Accessory('p1',{x:10,y: 0,z:11,d: 1},'Parade1'))
-                // things.push(new Accessory('d1',{x: 5,y: 0,z:11,d: 1},'drum'))
-                // things.push(new Accessory('d2',{x:15,y: 0,z:11,d: 1},'drum'))
-                // things.push(new Accessory('s1',{x: 0,y: 0,z: 0,d: 1},'posiSele'))
-                // things.push(new Accessory('s2',{x: 0,y: 0,z: 0,d: 1},'charSele'))
-                // things.push(new Accessory('s3',{x: 0,y: 0,z: 0,d: 1},'objeSele'))
-                // things.push(new Accessory('s3',{x: 4,y: 0,z: 3,d: 0},'dummy'))
-                // things.forEach(function(unit){
-                //     scene.add(unit)
-                // })
+                })            
 
                 // add selectors
                 selectors[0]=new Accessory('s0',{x: 0,y: 0,z: 0,d: 1},'posiSele')
@@ -165,18 +121,8 @@
                 scene.add(selectors[1])
                 selectors[2]=new Accessory('s2',{x: 0,y: 0,z: 0,d: 1},'objeSele')
                 scene.add(selectors[2])
-
-                // var geometry = new THREE.BoxGeometry(.1,1,.1);
-                // var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-                // var cube = new THREE.Mesh( geometry, material );
-                // var cube1 = new THREE.Mesh( geometry, material );
-                // cube.position.set(2.6,.5,2.6)
-                // scene.add( cube );
-                // console.log(cube)
                 
-                // var flag=new Accessory('f1',{x: 2.6,y: 0,z: 2.6,d: 0},'littleflag')
-                // scene.add( flag );
-
+                // user control react
                 document.oncontextmenu = new Function("return false;");
                 document.getElementById('cont').addEventListener('mousedown',onMouseDrag,false)
                 document.getElementById('cont').addEventListener('mousemove',onMouseDrag,false)
@@ -228,18 +174,6 @@
             }
 
             function onKeyPress(event){
-                // peoples.forEach(function(element) {
-                //     if(element.name!="a"){                        
-                //         element.doSingleCommand(event.key)
-                //     }
-                // });
-                // console.log(event.key)
-                // if(event.key=="m"){
-                //     peoples.forEach(function(man){
-                //         man.showMarks()
-                //     })
-                // }
-
                 if(focusMan){
                     var a=focusMan.doSingleCommand(event.key,function(operators){
                         console.log(operators)
@@ -250,17 +184,8 @@
                         })
                     }
                 }
-                
-                // focusMan.doSingleCommand(event.key,function(operate){
-                //     console.log(operate)z
-                // })
             }
 
-            // function selectPeopleByName(name){
-            //     peoples.forEach(function(man){
-            //         if(man.name==name){return man}
-            //     });
-            // }
 
             peoples.findByName=function(name){
                 var selectMan
@@ -276,15 +201,6 @@
                 });
                 return selectMan
             }
-
-            // function selectThings(name){
-            //     for(var i=0;i<things.length;i++){
-            //         // console.log()
-            //         if(things[i].name==name){
-            //             return things[i]
-            //         }
-            //     } 
-            // }
             
             things.findByName=function(name){
                 var selectObj
@@ -302,26 +218,6 @@
                 return selectObj
             }
 
-            // var rePlotMarks=function(peoples,things){
-            //     marks.forEach(function(sign){
-            //         scene.remove(sign)
-            //     })
-            //     // console.log(peoples)
-            //     peoples.forEach(function(man){
-            //         console.log(man.position,man.health)
-            //         var x=man.position.x
-            //         var y=man.position.y
-            //         var z=man.position.z
-            //         var geometry = new THREE.BoxGeometry(.1,.5,.1);
-            //         var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-            //         var cube = new THREE.Mesh( geometry, material );
-            //         cube.position.set(x-.4,y+.5,z-.4)
-            //         scene.add( cube );
-            //         marks.push(cube)
-            //     })
-            // }
-
-
 			function animate() {				
                 var delta = clock.getDelta();
                 peoples.forEach(function(element) {
@@ -330,7 +226,6 @@
                     }
                 });
                 requestAnimationFrame( animate );
-                // console.log(animate())
 				render();                
             }
             
@@ -341,27 +236,7 @@
                 }
                 if(focusObj){
                     selectors[2].position.copy(focusObj.position) 
-                }
-                
-                // rePlotMarks(peoples,things)  
-                // console.log(peoples[0])
-                
-                peoples.forEach(function(element) {
-
-                    // element.showMarks()
-                    // console.log(element.actions[element.doing])
-                    if(element.mixer!=undefined){
-                        // if(!element.control && element.name!="a"){                        
-                        //     element.todo('base')
-                        // }
-                        // if(!element.control && element.name=="a"){
-                        //     element.todo('sits')
-                        // }
-                        // if(!element.control && element.name=="W-f1"){
-                        //     element.todo('sway')
-                        // }
-                    }
-                });        
+                }        
             }
             init();
             animate();

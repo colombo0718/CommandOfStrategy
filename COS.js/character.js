@@ -18,7 +18,6 @@ var Character=( function(){
 		var fs=require('fs') 
 		var data=JSON.parse(fs.readFileSync('./career/'+trunk.career+'.json'))
 		trunk.health=data.health
-		trunk.health=data.health
 		trunk.stamina=data.stamina
 		trunk.weight=data.weight
 		trunk.signs=data.signs
@@ -94,7 +93,6 @@ var Character=( function(){
 						trunk.markSpace.rflag=object
 						trunk.markSpace.add(object);
 					});
-
 			});
 
 		trunk.showMarks=function(){
@@ -110,8 +108,20 @@ var Character=( function(){
 			var material = new THREE.MeshBasicMaterial( {color: bloodcolor} );
 			var cube = new THREE.Mesh( geometry, material );
 			cube.position.set(-.4,1-this.health/20,.4)
+			// cube.position.set(-.4,this.health/20,.4)
 			this.markSpace.blood=cube
 			this.markSpace.add(cube);
+			// plot black no blood stick
+			this.markSpace.remove(trunk.markSpace.noblood)
+			var lost=1-this.health/10
+			if(lost==0){lost=0.001}
+			var geometry = new THREE.BoxGeometry(.05,lost,.05);
+			var material = new THREE.MeshBasicMaterial( {color: 0x000000} );
+			var cube = new THREE.Mesh( geometry, material );
+			cube.position.set(-.4,lost/2,.4)
+			this.markSpace.noblood=cube
+			this.markSpace.add(cube);
+			
 			//set small flag
 			if(this.markSpace.gflag!=undefined && this.markSpace.gflag!=undefined){
 				// console.log(this.markSpace.gflag.visible)
@@ -244,8 +254,7 @@ var Character=( function(){
 				if(ss.name==skillname){
 					relative=ss.operator
 					// console.log(ss.operator[0].position)
-				}
-				
+				}			
 			})
 
 			alter.position.d=alter.position.d%4
