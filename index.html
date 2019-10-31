@@ -94,6 +94,7 @@
                 // try fs load json --------------
                 var compaign
                 compaign = JSON.parse(fs.readFileSync('story/train.json'))
+                // compaign = JSON.parse(fs.readFileSync('story/basic.json'))
                 // build field --------------               
                 field=new BuildField(compaign.map)
                 scene.add(field)
@@ -174,15 +175,23 @@
             }
 
             function onKeyPress(event){
+                var a
                 if(focusMan){
-                    var a=focusMan.doSingleCommand(event.key,function(operators){
-                        console.log(operators)
-                    })
-                    if(a){
-                        a.forEach(function(oper){
-                            console.log(oper.position)
+                    a=focusMan.doSingleCommand(event.key)
+                }
+                if(a){
+                    a.forEach(function(oper){
+                        peoples.forEach(function(man){
+                            if(man.position.equals(oper.position)){
+                                man.health-=oper.damage
+                                console.log(man.health)
+                                man.todo('beaten',1)
+                                if(man.health==0){
+                                    man.todo('dead',1)
+                                }
+                            }
                         })
-                    }
+                    })
                 }
             }
 

@@ -100,17 +100,20 @@ var Character=( function(){
 			this.markSpace.position.copy(this.position)
 			// plot blood stick
 			this.markSpace.remove(trunk.markSpace.blood)
-			var geometry = new THREE.BoxGeometry(.05,this.health/10,.05);
-			var bloodcolor=0x0000ff
+			var rest=this.health/10
+			if(rest==0){rest=0.001}
+			var geometry = new THREE.BoxGeometry(.05,rest,.05);
+			var bloodcolor=0x00ffff
 			if(this.health<8){bloodcolor=0x00ff00}
 			if(this.health<5){bloodcolor=0xffff00}
 			if(this.health<3){bloodcolor=0xff0000}
 			var material = new THREE.MeshBasicMaterial( {color: bloodcolor} );
 			var cube = new THREE.Mesh( geometry, material );
-			cube.position.set(-.4,1-this.health/20,.4)
+			cube.position.set(-.4,1-rest/2,.4)
 			// cube.position.set(-.4,this.health/20,.4)
 			this.markSpace.blood=cube
 			this.markSpace.add(cube);
+
 			// plot black no blood stick
 			this.markSpace.remove(trunk.markSpace.noblood)
 			var lost=1-this.health/10
@@ -174,7 +177,7 @@ var Character=( function(){
 			if(alter.position.d<0){alter.position.d+=4}
 			setTimeout(function(){
 				switch(name){
-					case "forward":
+					case "walk":
 						// console.log(this)
 						if(alter.position.d==0){alter.position.z+=1}
 						if(alter.position.d==1){alter.position.x+=1}
@@ -197,7 +200,7 @@ var Character=( function(){
 		}
 
 		// actions ------------
-		var actionNames=['base','sway','walk','hack','sits','turnLeft','turnRigh','swep','spur','salute']
+		var actionNames=['base','sway','beaten','walk','hack','sits','turnLeft','turnRigh','swep','spur','salute','dead']
 
 		trunk.defaultAction="base"
 
@@ -265,13 +268,12 @@ var Character=( function(){
 				if(alter.position.d==1){cos= 0,sin= 1}
 				if(alter.position.d==2){cos=-1,sin= 0}
 				if(alter.position.d==3){cos= 0,sin=-1}
-				var oper1={position:{x: 1,y:0,z: 1,d:0}}
+				// deep copy
+				var oper1={position:{x: 0,y:0,z: 0,d:0},damage:1}
 				oper1.position.x=oper.position.z*sin+oper.position.x*cos+alter.position.x
 				oper1.position.y=oper.position.y+alter.position.y
 				oper1.position.z=oper.position.z*cos-oper.position.x*sin+alter.position.z
 				oper1.position.d=oper.position.d+alter.position.d
-				// console.log(oper.position)
-				// console.log(oper1.position)
 				absolute.push(oper1)
 			})
 			// console.log(absolute)
@@ -377,7 +379,7 @@ var Character=( function(){
 			// setTimeout(function(){
 				if(command=='w' ){               
 					alter.todo('walk',1)
-					alter.move('forward',1)
+					alter.move('walk',1)
 				}
 				if(command=='s'){
 					alter.todo('salute',1)
@@ -409,7 +411,7 @@ var Character=( function(){
 					operators=alter.cast('spur') // !!!!!!!
 				}
 			// },delay*1000)
-			callback(operators)
+			// callback(operators)
 			return operators
 		}
 		// ------------------------------
