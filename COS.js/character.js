@@ -17,6 +17,8 @@ var Character=( function(){
 		// set default parameter from document
 		var fs=require('fs') 
 		var data=JSON.parse(fs.readFileSync('./career/'+trunk.career+'.json'))
+		trunk.species=data.species
+		console.log(trunk.species)
 		trunk.health=data.health
 		trunk.stamina=data.stamina
 		trunk.weight=data.weight
@@ -45,12 +47,12 @@ var Character=( function(){
 			// bindBone(part)
 			new MTLLoader()
 				.setPath( './dolls/'+career+'/' )
-				.load( 'male-'+part+'.mtl', function ( materials ) {
+				.load( trunk.species+'-'+part+'.mtl', function ( materials ) {
 					materials.preload();
 					new OBJLoader()
 						.setMaterials( materials )
 						.setPath( './dolls/'+career+'/' )
-						.load( 'male-'+part+'.obj', function ( object ) {
+						.load( trunk.species+'-'+part+'.obj', function ( object ) {
 							object.rotateX(Math.PI/2)
 							trunk.getObjectByName('Bone-'+part).add(object);
 						});
@@ -221,6 +223,7 @@ var Character=( function(){
 
 		trunk.todo=function(name,keep){
 			var alter=this
+			if(alter.control==true){return}
 			alter.actions[alter.doing].setEffectiveWeight(0).play()
 			// if(name!=alter.defaultAction && alter.stamina<=0){
 			// 	return
@@ -232,13 +235,23 @@ var Character=( function(){
 			// alter.stamina-=1
 			// console.log(alter.stamina)
 			// console.log(alter.position)
-			
 			if(keep && keep!=0){
 				alter.control=true
 				setTimeout(function(){
 					// alter.showMarks()
 					alter.control=false
 					alter.todo(alter.defaultAction)
+					// if character died
+					if(alter.health==0){
+						alter.todo('dead')
+						alter.control=true
+						// play dead after beaten
+						setTimeout(function(){
+							alter.actions['dead'].paused=true
+							alter.markSpace.visible=false
+						},keep*1000)
+					}
+					
 				},keep*1000)
 			}
 

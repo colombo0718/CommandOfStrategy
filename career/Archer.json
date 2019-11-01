@@ -1,10 +1,10 @@
 {
     "career":"Recruit",
-    "species":"male",
+    "species":"female",
     "health":10,
     "stamina":10,
     "weight":2,
-    "signs":["midbun","scarf"],
+    "signs":["sidebun","sidescarf"],
     "orders":[
         {"key":"w","action":"walk"},
         {"key":"a","action":"turnLeft"},

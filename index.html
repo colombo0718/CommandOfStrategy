@@ -55,6 +55,7 @@
             var focusMan,focusObj
             var fs=require('fs')
             // console.log(fs)
+            var arr= new THREE.Group();
             
 
             document.getElementById("commandButton").addEventListener(
@@ -113,7 +114,11 @@
                     var obj=new Accessory(toy.name,toy.position,toy.type)
                     things.push(obj)
                     scene.add(obj)
-                })            
+                }) 
+                
+                // add arrow test
+                    arr=things.findByName('a1')
+                    arr.scale.set(.125,.125,.125)
 
                 // add selectors
                 selectors[0]=new Accessory('s0',{x: 0,y: 0,z: 0,d: 1},'posiSele')
@@ -186,12 +191,16 @@
                                 man.health-=oper.damage
                                 console.log(man.health)
                                 man.todo('beaten',1)
-                                if(man.health==0){
-                                    man.todo('dead',1)
-                                }
+                                // if(man.health==0){
+                                //     man.todo('dead',1)
+                                // }
                             }
                         })
                     })
+                }
+
+                if(event.key=='p'){
+                    arr.position.set(3,.5,0)
                 }
             }
 
@@ -234,6 +243,17 @@
                         element.mixer.update(delta)
                     }
                 });
+                // console.log(peoples[0].mixer.update(delta))
+                // if(arr.mixer!=undefined){
+                //     arr.mixer.update(delta)
+                // }
+                var v=10
+                if(Math.abs(arr.position.z-5)<.1){
+                    arr.position.z+=0
+                }else{arr.position.z+=v*delta}
+                // arr.position.z+=v*delta
+                arr.position.z
+                
                 requestAnimationFrame( animate );
 				render();                
             }
@@ -245,7 +265,7 @@
                 }
                 if(focusObj){
                     selectors[2].position.copy(focusObj.position) 
-                }        
+                }    
             }
             init();
             animate();
