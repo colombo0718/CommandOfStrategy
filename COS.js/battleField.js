@@ -7,7 +7,7 @@ var EmptyMap=( function(){
         var map=[]
         for(var i=0;i<x;i++){
             var col=new Array(y)
-            col.fill(0)
+            col.fill(1)
             map.push(col.slice(0))
         }
 		return map

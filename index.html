@@ -55,6 +55,7 @@
             var focusMan,focusObj
             var fs=require('fs')
             // console.log(fs)
+            var a,states=''
             var arr= new THREE.Group();
             
 
@@ -96,7 +97,8 @@
                 var compaign
                 compaign = JSON.parse(fs.readFileSync('story/train.json'))
                 // compaign = JSON.parse(fs.readFileSync('story/basic.json'))
-                // build field --------------               
+                // build field --------------       
+                // field=new BuildField(a=new EmptyMap(50,50))
                 field=new BuildField(compaign.map)
                 scene.add(field)
                 
@@ -117,8 +119,8 @@
                 }) 
                 
                 // add arrow test
-                    arr=things.findByName('a1')
-                    arr.scale.set(.125,.125,.125)
+                    // arr=things.findByName('a1')
+                    // arr.scale.set(.125,.125,.125)
 
                 // add selectors
                 selectors[0]=new Accessory('s0',{x: 0,y: 0,z: 0,d: 1},'posiSele')
@@ -139,7 +141,7 @@
             }
 
             function onMouseDrag(event){
-                if(event.deltaY>0 && camera.position.y<30){
+                if(event.deltaY>0 && camera.position.y<50){
                     camera.position.y+=1
                     camera.position.z-=1
                 }
@@ -191,13 +193,16 @@
                                 man.health-=oper.damage
                                 console.log(man.health)
                                 man.todo('beaten',1)
-                                // if(man.health==0){
-                                //     man.todo('dead',1)
-                                // }
                             }
                         })
                     })
                 }
+                states=''
+                peoples.forEach(function(man){
+                    // states+=man.name+''+man.position.x+''+man.position.y+''+man.position.z+''+man.position.d
+                    states+=man.position.d
+                })
+                console.log(states)
 
                 if(event.key=='p'){
                     arr.position.set(3,.5,0)

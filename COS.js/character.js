@@ -60,7 +60,7 @@ var Character=( function(){
 		})
 
 
-		// build MarkSpace and Marks
+		// build MarkSpace and Marks ------------------------------
 		trunk.markSpace=new THREE.Group()
 			// add blood stick
 		new MTLLoader()
@@ -76,6 +76,8 @@ var Character=( function(){
 						object.position.set(-.4,0,.4)
 						// object.position.set(0,0,0)
 						trunk.markSpace.gflag=object
+						console.log(trunk.markSpace.gflag.children[0].material.transparent=true)
+						console.log(trunk.markSpace.gflag.children[0].material.opacity=.3)
 						trunk.markSpace.add(object);
 					});
 
@@ -126,6 +128,10 @@ var Character=( function(){
 			cube.position.set(-.4,lost/2,.4)
 			this.markSpace.noblood=cube
 			this.markSpace.add(cube);
+
+			// console.log(this.markSpace.gflag)
+			// console.log(this.markSpace.gflag)
+
 			
 			//set small flag
 			if(this.markSpace.gflag!=undefined && this.markSpace.gflag!=undefined){
@@ -159,6 +165,8 @@ var Character=( function(){
 			.setPath( './dolls/signs/' )
 			.load(trunk.signs[0]+'.obj', function ( object ) {
 				object.children[0].material.color.set(campcolor)
+				// console.log(object.children[0].material.transparent=true)
+				// console.log(object.children[0].material.opacity=.5)
 				object.rotateX(Math.PI/2)
 				trunk.getObjectByName('Bone-30').add(object);
 			});
@@ -333,40 +341,28 @@ var Character=( function(){
 		}		
 
 		// gears ----------------------------
-		var gearNames=['sword-right','sword-left',"dagaxe"]
+		var gearNames=['sword','sword-left',"dagaxe"]
 		var gearBinds=['53','43','53']
+		console.log(data.gears)
 		trunk.gears=[]
-		new MTLLoader()
-			.setPath( './gears/' )
-			.load( 'sword-right.mtl', function ( materials ) {
-			// .load( 'dagaxe.mtl', function ( materials ) {
-				materials.preload();
-				new OBJLoader()
-					.setMaterials( materials )
-					.setPath( './gears/' )
-					.load( 'sword-right.obj', function ( object ) {
-						// .load( 'dagaxe.obj', function ( object ) {
-						object.rotateX(Math.PI/2)
-						trunk.gears['sword-right']=object
-						trunk.getObjectByName('Bone-53').add(object);
-					});
 
-			});
-		new MTLLoader()
-			.setPath( './gears/' )
-			.load( 'sword-left.mtl', function ( materials ) {
-				materials.preload();
-				new OBJLoader()
-					.setMaterials( materials )
-					.setPath( './gears/' )
-					.load( 'sword-left.obj', function ( object ) {
-						object.rotateX(Math.PI/2)
-						trunk.gears['sword-left']=object
-						trunk.gears['sword-left'].visible=false
-						trunk.getObjectByName('Bone-43').add(object);
-					});
-
-			});	
+		data.gears.forEach(function(gear){
+			new MTLLoader()
+				.setPath( './gears/' )
+				.load( gear[0]+'.mtl', function ( materials ) {
+				// .load( 'dagaxe.mtl', function ( materials ) {
+					materials.preload();
+					new OBJLoader()
+						.setMaterials( materials )
+						.setPath( './gears/' )
+						.load( gear[0]+'.obj', function ( object ) {
+							// .load( 'dagaxe.obj', function ( object ) {
+							object.rotateX(Math.PI/2)
+							trunk.gears[gear[0]]=object
+							trunk.getObjectByName('Bone-'+gear[1]).add(object);
+						});
+				});
+		})
 		
 		trunk.take=function(name,delay){
 			var alter=this

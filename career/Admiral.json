@@ -4,7 +4,8 @@
     "health":10,
     "stamina":10,
     "weight":2,
-    "signs":["headband","scarf"],
+    "signs":["midbun","scarf"],
+    "gears":[],
     "orders":[
         {"key":"w","action":"walk"},
         {"key":"a","action":"turnLeft"},

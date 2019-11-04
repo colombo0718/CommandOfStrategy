@@ -12,6 +12,7 @@
     ],
     "obj":[
         {"name":"d1","position":{"x": 3,"y":0,"z": 5,"d":0},"type":"dummy"},
+        {"name":"t1","position":{"x": 6,"y":0,"z": 1,"d":1},"type":"torch"},
         {"name":"b1","position":{"x": 1,"y":0,"z": 0,"d":0},"type":"wall-side_bamboo"},
         {"name":"b1","position":{"x": 2,"y":0,"z": 0,"d":0},"type":"wall-side_bamboo"},
         {"name":"b1","position":{"x": 3,"y":0,"z": 0,"d":0},"type":"wall-side_bamboo"},
@@ -21,14 +22,9 @@
         {"name":"b1","position":{"x": 2,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"},
         {"name":"b1","position":{"x": 3,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"},
         {"name":"b1","position":{"x": 4,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"},
-        {"name":"b1","position":{"x": 5,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"},
-        {"name":"h1","position":{"x": 6,"y":0,"z": 5,"d":1},"type":"horse"},
-        {"name":"a1","position":{"x": 6,"y":0,"z": 2,"d":1},"type":"arrow"}
+        {"name":"b1","position":{"x": 5,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"}
     ],
     "cha":[
-        {"name":"B-f1","position":{"x":3,"y":0,"z":1,"d":-1},"carr":"Recruit","camp":"B"},
-        {"name":"W-f1","position":{"x":2,"y":0,"z":1,"d": 1},"carr":"Recruit","camp":"W"},
-        {"name":"W-f1","position":{"x":4,"y":0,"z":1,"d":-1},"carr":"Archer", "camp":"B"},
-        {"name":"W-f1","position":{"x":1,"y":0,"z":1,"d": 1},"carr":"Archer", "camp":"W"}
+        {"name":"Gf1","position":{"x":3,"y":0,"z":1,"d":0},"carr":"Recruit","camp":"G"}
     ]   
 }
