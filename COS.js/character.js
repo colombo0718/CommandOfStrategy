@@ -9,8 +9,9 @@ var Character=( function(){
 		// set parameter from call function
 		trunk.name=name
 		trunk.position.copy(position)
-		trunk.direction=position.d
 		trunk.position.d=position.d
+		trunk.position.d=trunk.position.d%4
+		if(trunk.position.d<0){trunk.position.d+=4}
 		trunk.career=career
 		trunk.camp=camp
 		trunk.control=false 
@@ -36,7 +37,7 @@ var Character=( function(){
 				trunk.mixer = new THREE.AnimationMixer( trunk.skeletonHelper );
 				trunk.scale.set(.25,.25,.25)
 				trunk.add( result.skeleton.bones[ 0 ] );
-				trunk.rotateY( Math.PI/2*position.d%4)
+				trunk.rotateY( Math.PI/2*trunk.position.d)
 				trunk.rotateX(-Math.PI/2)
 			} );
 
@@ -185,7 +186,7 @@ var Character=( function(){
 			if(!delay){delay=0}
 			alter.position.d=alter.position.d%4
 			if(alter.position.d<0){alter.position.d+=4}
-			setTimeout(function(){
+			// setTimeout(function(){
 				switch(name){
 					case "walk":
 						// console.log(this)
@@ -206,7 +207,9 @@ var Character=( function(){
 						break;
 				}
 				// alter.position.d=alter.position.d
-			},delay*1000)
+				alter.position.d=alter.position.d%4
+				if(alter.position.d<0){alter.position.d+=4}
+			// },delay*1000)
 		}
 
 		// actions ------------
@@ -239,6 +242,7 @@ var Character=( function(){
 			alter.actions[name].setEffectiveWeight(0).reset()
 			alter.actions[name].setEffectiveWeight(1).play()
 			alter.doing=name
+			alter.showMarks()
 			// alter.hideMarks()
 			// alter.stamina-=1
 			// console.log(alter.stamina)
@@ -263,10 +267,28 @@ var Character=( function(){
 				},keep*1000)
 			}
 
-			setTimeout(function(){
-				alter.showMarks()
-			},keep*1100)
+			// setTimeout(function(){
+			// 	alter.showMarks()
+			// },keep*1100)
 		}
+		//   feedback present states
+		trunk.getStates=function(){
+			var states=this.name+':'
+			if(this.position.x<10){states+=0}
+				states+=this.position.x+','
+			if(this.position.y<10){states+=0}
+				states+=this.position.y+','
+			if(this.position.z<10){states+=0}
+				states+=this.position.z+','
+			if(this.position.d<10){states+=0}
+				states+=this.position.d+','
+			if(this.health<10){states+=0}
+				states+=this.health
+			states+='|'
+			// console.log(0+this.position.x.toString())
+			return states
+		}
+
 		//  cast skills ---------------------
 
 		trunk.cast=function(skillname){
@@ -386,37 +408,43 @@ var Character=( function(){
 			if(alter.control){return}
 			// if(!delay){delay=0}
 			// setTimeout(function(){
-				if(command=='w' ){               
+				if(command=='w' ){  
+					alter.move('walk',0)             
 					alter.todo('walk',1)
-					alter.move('walk',1)
+					// alter.move('walk',1)
+					
 				}
 				if(command=='s'){
 					alter.todo('salute',1)
 				}
 				if(command=='d'){
+					alter.move('turnRigh',0)
 					alter.todo('turnRigh',1)
-					alter.move('turnRigh',1)
+					// alter.move('turnRigh',1)
+					
 				}
 				if(command=='a'){
+					alter.move('turnLeft',0)
 					alter.todo('turnLeft',1)
-					alter.move('turnLeft',1)
+					// alter.move('turnLeft',1)
+					
 				}
 				if(command=='x'){
 					alter.todo('hack',1)
-					alter.show('hack',.3)
-					alter.hide('hack',1)
+					// alter.show('hack',.3)
+					// alter.hide('hack',1)
 					operators=alter.cast('hack') // !!!!!!!
 				}
 				if(command=='c'){
 					alter.todo('swep',1)
-					alter.show('swep',.3)
-					alter.hide('swep',1)
+					// alter.show('swep',.3)
+					// alter.hide('swep',1)
 					operators=alter.cast('swep') // !!!!!!!
 				}
 				if(command=='z'){
 					alter.todo('spur',1)
-					alter.show('spur',.3)
-					alter.hide('spur',1)
+					// alter.show('spur',.3)
+					// alter.hide('spur',1)
 					operators=alter.cast('spur') // !!!!!!!
 				}
 			// },delay*1000)

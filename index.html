@@ -191,18 +191,22 @@
                         peoples.forEach(function(man){
                             if(man.position.equals(oper.position)){
                                 man.health-=oper.damage
-                                console.log(man.health)
+                                
                                 man.todo('beaten',1)
                             }
                         })
                     })
                 }
+                
                 states=''
                 peoples.forEach(function(man){
-                    // states+=man.name+''+man.position.x+''+man.position.y+''+man.position.z+''+man.position.d
-                    states+=man.position.d
+                    // states+=man.name+':'+man.position.x+man.position.y+man.position.z+man.position.d+man.health+'|'
+                    // states+=man.position.d
+                    
+                    states+=man.getStates()
                 })
                 console.log(states)
+                
 
                 if(event.key=='p'){
                     arr.position.set(3,.5,0)
@@ -270,7 +274,7 @@
                 }
                 if(focusObj){
                     selectors[2].position.copy(focusObj.position) 
-                }    
+                }  
             }
             init();
             animate();

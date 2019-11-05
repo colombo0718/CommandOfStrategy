@@ -25,6 +25,7 @@
         {"name":"b1","position":{"x": 5,"y":0,"z": 6,"d":0},"type":"wall-side_bamboo"}
     ],
     "cha":[
-        {"name":"Gf1","position":{"x":3,"y":0,"z":1,"d":0},"carr":"Recruit","camp":"G"}
+        {"name":"Gf1","position":{"x":3,"y":0,"z":1,"d":3},"carr":"Recruit","camp":"G"},
+        {"name":"Wf1","position":{"x":2,"y":0,"z":1,"d":-1},"carr":"Recruit","camp":"W"}
     ]   
 }
