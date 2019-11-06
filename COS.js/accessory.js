@@ -9,7 +9,7 @@ var Accessory=( function(){
         var thing=new THREE.Group(); 
         thing.name=name
         thing.scale.set(.25,.25,.25)
-        thing.position.set(position.x,position.y,position.z)
+        thing.position.copy(position)
         
         new MTLLoader()
         .setPath( './goods/' )
@@ -19,6 +19,8 @@ var Accessory=( function(){
                 .setMaterials( materials )
                 .setPath( './goods/' )
                 .load( type+'.obj', function ( object ) {
+                    thing.rotateY( Math.PI/2*position.d)
+                    // thing.rotateY( Math.PI/2)
                     thing.add(object)
                 });
 

@@ -182,27 +182,22 @@
             }
 
             function onKeyPress(event){
-                var a
+                var operators
                 if(focusMan){
-                    a=focusMan.doSingleCommand(event.key)
+                    operators=focusMan.doSingleCommand(event.key)
                 }
-                if(a){
-                    a.forEach(function(oper){
+                if(operators){
+                    operators.forEach(function(oper){
                         peoples.forEach(function(man){
                             if(man.position.equals(oper.position)){
                                 man.health-=oper.damage
-                                
                                 man.todo('beaten',1)
                             }
                         })
                     })
                 }
-                
                 states=''
                 peoples.forEach(function(man){
-                    // states+=man.name+':'+man.position.x+man.position.y+man.position.z+man.position.d+man.health+'|'
-                    // states+=man.position.d
-                    
                     states+=man.getStates()
                 })
                 console.log(states)

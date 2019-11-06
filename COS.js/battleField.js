@@ -24,6 +24,7 @@ var BuildField=( function(){
             new MTLLoader()
             .setPath( './tiles/' )
             .load( name+'.mtl', function ( materials ) {
+                console.log(name)
                 // materials.preload();
                 new OBJLoader()
                     .setMaterials( materials )

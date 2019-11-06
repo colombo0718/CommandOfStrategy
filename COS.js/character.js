@@ -63,42 +63,15 @@ var Character=( function(){
 
 		// build MarkSpace and Marks ------------------------------
 		trunk.markSpace=new THREE.Group()
-			// add blood stick
-		new MTLLoader()
-			.setPath( './goods/' )
-			.load( 'walkflag.mtl', function ( materials ) {
-				materials.preload();
-				new OBJLoader()
-					.setMaterials( materials )
-					.setPath( './goods/' )
-					.load( 'walkflag.obj', function ( object ) {
-						// console.log(object.children[0].material.color.set(0x000000))
-						object.scale.set(.25,.25,.25)
-						object.position.set(-.4,0,.4)
-						// object.position.set(0,0,0)
-						trunk.markSpace.gflag=object
-						console.log(trunk.markSpace.gflag.children[0].material.transparent=true)
-						console.log(trunk.markSpace.gflag.children[0].material.opacity=.3)
-						trunk.markSpace.add(object);
-					});
 
-			});
-
-		new MTLLoader()
-			.setPath( './goods/' )
-			.load( 'stopflag.mtl', function ( materials ) {
-				materials.preload();
-				new OBJLoader()
-					.setMaterials( materials )
-					.setPath( './goods/' )
-					.load( 'stopflag.obj', function ( object ) {
-						object.scale.set(.25,.25,.25)
-						object.position.set(-.4,0,.4)
-						object.visible=false
-						trunk.markSpace.rflag=object
-						trunk.markSpace.add(object);
-					});
-			});
+		var geometry = new THREE.SphereGeometry( .08, 8, 8);
+		var material = new THREE.MeshLambertMaterial( {color: 0x0000ff} );
+		var sphere = new THREE.Mesh( geometry, material );
+		sphere.position.set(-.4,1.08,.4)
+		sphere.material.transparent=true
+		sphere.material.opacity=1
+		trunk.markSpace.add( sphere );
+		trunk.markSpace.staminaBall=sphere
 
 		trunk.showMarks=function(){
 			this.markSpace.visible=true
@@ -112,7 +85,7 @@ var Character=( function(){
 			if(this.health<8){bloodcolor=0x00ff00}
 			if(this.health<5){bloodcolor=0xffff00}
 			if(this.health<3){bloodcolor=0xff0000}
-			var material = new THREE.MeshBasicMaterial( {color: bloodcolor} );
+			var material = new THREE.MeshLambertMaterial( {color: bloodcolor} );
 			var cube = new THREE.Mesh( geometry, material );
 			cube.position.set(-.4,1-rest/2,.4)
 			// cube.position.set(-.4,this.health/20,.4)
@@ -124,25 +97,21 @@ var Character=( function(){
 			var lost=1-this.health/10
 			if(lost==0){lost=0.001}
 			var geometry = new THREE.BoxGeometry(.05,lost,.05);
-			var material = new THREE.MeshBasicMaterial( {color: 0x000000} );
+			var material = new THREE.MeshLambertMaterial( {color: 0x000000} );
 			var cube = new THREE.Mesh( geometry, material );
 			cube.position.set(-.4,lost/2,.4)
+			cube.material.transparent=true
+			cube.material.opacity=.5
 			this.markSpace.noblood=cube
 			this.markSpace.add(cube);
 
-			// console.log(this.markSpace.gflag)
-			// console.log(this.markSpace.gflag)
-
-			
-			//set small flag
-			if(this.markSpace.gflag!=undefined && this.markSpace.gflag!=undefined){
+			//set stamina ball transparent
+			if(this.markSpace.staminaBall!=undefined){
 				// console.log(this.markSpace.gflag.visible)
 				if(this.stamina>0){
-					this.markSpace.gflag.visible=true
-					this.markSpace.rflag.visible=false
+					this.markSpace.staminaBall.material.opacity=1
 				}else{
-					this.markSpace.gflag.visible=false
-					this.markSpace.rflag.visible=true
+					this.markSpace.staminaBall.material.opacity=.5
 				}
 			}
 		}
@@ -166,8 +135,6 @@ var Character=( function(){
 			.setPath( './dolls/signs/' )
 			.load(trunk.signs[0]+'.obj', function ( object ) {
 				object.children[0].material.color.set(campcolor)
-				// console.log(object.children[0].material.transparent=true)
-				// console.log(object.children[0].material.opacity=.5)
 				object.rotateX(Math.PI/2)
 				trunk.getObjectByName('Bone-30').add(object);
 			});
@@ -243,10 +210,7 @@ var Character=( function(){
 			alter.actions[name].setEffectiveWeight(1).play()
 			alter.doing=name
 			alter.showMarks()
-			// alter.hideMarks()
-			// alter.stamina-=1
-			// console.log(alter.stamina)
-			// console.log(alter.position)
+			alter.stamina-=1
 			if(keep && keep!=0){
 				alter.control=true
 				setTimeout(function(){
@@ -261,15 +225,11 @@ var Character=( function(){
 						setTimeout(function(){
 							alter.actions['dead'].paused=true
 							alter.markSpace.visible=false
+							alter.visible=false
 						},keep*1000)
-					}
-					
+					}	
 				},keep*1000)
 			}
-
-			// setTimeout(function(){
-			// 	alter.showMarks()
-			// },keep*1100)
 		}
 		//   feedback present states
 		trunk.getStates=function(){
@@ -426,8 +386,7 @@ var Character=( function(){
 				if(command=='a'){
 					alter.move('turnLeft',0)
 					alter.todo('turnLeft',1)
-					// alter.move('turnLeft',1)
-					
+					// alter.move('turnLeft',1)			
 				}
 				if(command=='x'){
 					alter.todo('hack',1)
@@ -452,6 +411,29 @@ var Character=( function(){
 			return operators
 		}
 		// ------------------------------
+		/* index.html 
+		function onKeyPress(event){
+			var operators
+			if(focusMan){
+				operators=focusMan.doSingleCommand(event.key)
+			}
+			if(operators){
+				operators.forEach(function(oper){
+					peoples.forEach(function(man){
+						if(man.position.equals(oper.position)){
+							man.health-=oper.damage
+							man.todo('beaten',1)
+						}
+					})
+				})
+			}
+			states=''
+			peoples.forEach(function(man){
+				states+=man.getStates()
+			})
+			console.log(states)
+		}
+		*/
 		return trunk
 	}
 	return Character;
