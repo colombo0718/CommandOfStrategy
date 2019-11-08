@@ -17,13 +17,13 @@ var Character=( function(){
 		trunk.control=false 
 		// set default parameter from document
 		var fs=require('fs') 
-		var data=JSON.parse(fs.readFileSync('./career/'+trunk.career+'.json'))
-		trunk.species=data.species
+		var careerData=JSON.parse(fs.readFileSync('./career/'+trunk.career+'.json'))
+		trunk.species=careerData.species
 		console.log(trunk.species)
-		trunk.health=data.health
-		trunk.stamina=data.stamina
-		trunk.weight=data.weight
-		trunk.signs=data.signs
+		trunk.health=careerData.health
+		trunk.stamina=careerData.stamina
+		trunk.weight=careerData.weight
+		trunk.signs=careerData.signs
 		// show file in directory 
 		fs.readdir("./career/",function(err,files){console.log(files)})
 
@@ -107,7 +107,6 @@ var Character=( function(){
 
 			//set stamina ball transparent
 			if(this.markSpace.staminaBall!=undefined){
-				// console.log(this.markSpace.gflag.visible)
 				if(this.stamina>0){
 					this.markSpace.staminaBall.material.opacity=1
 				}else{
@@ -148,35 +147,28 @@ var Character=( function(){
 			});
 				
 		// moves ------------------
-		trunk.move=function(name,delay){
+		trunk.move=function(name){
 			var alter=this
-			if(!delay){delay=0}
 			alter.position.d=alter.position.d%4
 			if(alter.position.d<0){alter.position.d+=4}
-			// setTimeout(function(){
-				switch(name){
-					case "walk":
-						// console.log(this)
-						if(alter.position.d==0){alter.position.z+=1}
-						if(alter.position.d==1){alter.position.x+=1}
-						if(alter.position.d==2){alter.position.z-=1}
-						if(alter.position.d==3){alter.position.x-=1}
-						break;
-					case "turnRigh":
-						alter.rotateZ(-Math.PI/2)
-						alter.position.d-=1
-						alter.position.d=alter.position.d%4
-						break;
-					case "turnLeft":
-						alter.rotateZ(Math.PI/2)
-						alter.position.d+=1
-						alter.position.d=alter.position.d%4
-						break;
-				}
-				// alter.position.d=alter.position.d
-				alter.position.d=alter.position.d%4
-				if(alter.position.d<0){alter.position.d+=4}
-			// },delay*1000)
+			switch(name){
+				case "walk":
+					if(alter.position.d==0){alter.position.z+=1}
+					if(alter.position.d==1){alter.position.x+=1}
+					if(alter.position.d==2){alter.position.z-=1}
+					if(alter.position.d==3){alter.position.x-=1}
+					break;
+				case "turnRigh":
+					alter.rotateZ(-Math.PI/2)
+					alter.position.d-=1
+					break;
+				case "turnLeft":
+					alter.rotateZ(Math.PI/2)
+					alter.position.d+=1
+					break;
+			}
+			alter.position.d=alter.position.d%4
+			if(alter.position.d<0){alter.position.d+=4}
 		}
 
 		// actions ------------
@@ -201,24 +193,20 @@ var Character=( function(){
 
 		trunk.todo=function(name,keep){
 			var alter=this
-			if(alter.control==true){return}
 			alter.actions[alter.doing].setEffectiveWeight(0).play()
-			// if(name!=alter.defaultAction && alter.stamina<=0){
-			// 	return
-			// }
 			alter.actions[name].setEffectiveWeight(0).reset()
 			alter.actions[name].setEffectiveWeight(1).play()
 			alter.doing=name
-			alter.showMarks()
-			alter.stamina-=1
-			if(keep && keep!=0){
+			if(alter.health>0){alter.showMarks()}
+
+			if(name!=alter.defaultAction){
 				alter.control=true
 				setTimeout(function(){
-					// alter.showMarks()
-					alter.control=false
 					alter.todo(alter.defaultAction)
+					alter.control=false
+
 					// if character died
-					if(alter.health==0){
+					if(alter.health<0){
 						alter.todo('dead')
 						alter.control=true
 						// play dead after beaten
@@ -226,9 +214,9 @@ var Character=( function(){
 							alter.actions['dead'].paused=true
 							alter.markSpace.visible=false
 							alter.visible=false
-						},keep*1000)
-					}	
-				},keep*1000)
+						},1000)
+					}
+				},1000)
 			}
 		}
 		//   feedback present states
@@ -256,7 +244,7 @@ var Character=( function(){
 			var relative
 			var absolute=[]
 			
-			data.skills.forEach(function(ss){
+			careerData.skills.forEach(function(ss){
 				if(ss.name==skillname){
 					relative=ss.operator
 					// console.log(ss.operator[0].position)
@@ -265,6 +253,7 @@ var Character=( function(){
 
 			alter.position.d=alter.position.d%4
 			if(alter.position.d<0){alter.position.d+=4}
+			if(!relative){return}
 			relative.forEach(function(oper){
 				// console.log(oper)
 				var cos=1,sin=0
@@ -272,7 +261,7 @@ var Character=( function(){
 				if(alter.position.d==2){cos=-1,sin= 0}
 				if(alter.position.d==3){cos= 0,sin=-1}
 				// deep copy
-				var oper1={position:{x: 0,y:0,z: 0,d:0},damage:1}
+				var oper1={position:{x: 0,y:0,z: 0,d:0},damage:oper.damage}
 				oper1.position.x=oper.position.z*sin+oper.position.x*cos+alter.position.x
 				oper1.position.y=oper.position.y+alter.position.y
 				oper1.position.z=oper.position.z*cos-oper.position.x*sin+alter.position.z
@@ -323,12 +312,8 @@ var Character=( function(){
 		}		
 
 		// gears ----------------------------
-		var gearNames=['sword','sword-left',"dagaxe"]
-		var gearBinds=['53','43','53']
-		console.log(data.gears)
 		trunk.gears=[]
-
-		data.gears.forEach(function(gear){
+		careerData.gears.forEach(function(gear){
 			new MTLLoader()
 				.setPath( './gears/' )
 				.load( gear[0]+'.mtl', function ( materials ) {
@@ -338,7 +323,7 @@ var Character=( function(){
 						.setMaterials( materials )
 						.setPath( './gears/' )
 						.load( gear[0]+'.obj', function ( object ) {
-							// .load( 'dagaxe.obj', function ( object ) {
+						// .load( 'dagaxe.obj', function ( object ) {
 							object.rotateX(Math.PI/2)
 							trunk.gears[gear[0]]=object
 							trunk.getObjectByName('Bone-'+gear[1]).add(object);
@@ -366,74 +351,43 @@ var Character=( function(){
 			var alter=this
 			var operators
 			if(alter.control){return}
-			// if(!delay){delay=0}
-			// setTimeout(function(){
-				if(command=='w' ){  
-					alter.move('walk',0)             
-					alter.todo('walk',1)
-					// alter.move('walk',1)
-					
-				}
-				if(command=='s'){
-					alter.todo('salute',1)
-				}
-				if(command=='d'){
-					alter.move('turnRigh',0)
-					alter.todo('turnRigh',1)
-					// alter.move('turnRigh',1)
-					
-				}
-				if(command=='a'){
-					alter.move('turnLeft',0)
-					alter.todo('turnLeft',1)
-					// alter.move('turnLeft',1)			
-				}
-				if(command=='x'){
-					alter.todo('hack',1)
-					// alter.show('hack',.3)
-					// alter.hide('hack',1)
-					operators=alter.cast('hack') // !!!!!!!
-				}
-				if(command=='c'){
-					alter.todo('swep',1)
-					// alter.show('swep',.3)
-					// alter.hide('swep',1)
-					operators=alter.cast('swep') // !!!!!!!
-				}
-				if(command=='z'){
-					alter.todo('spur',1)
-					// alter.show('spur',.3)
-					// alter.hide('spur',1)
-					operators=alter.cast('spur') // !!!!!!!
-				}
-			// },delay*1000)
-			// callback(operators)
+				careerData.orders.forEach(function(ord){
+					if(ord.key==command){
+						alter.move(ord.action)             
+						alter.todo(ord.action)
+						operators=alter.cast(ord.action)
+					}
+				})
+				// if(command=='w' ){  
+				// 	alter.move('walk')             
+				// 	alter.todo('walk',1)
+				// }
+				// if(command=='s'){
+				// 	alter.todo('salute',1)
+				// }
+				// if(command=='d'){
+				// 	alter.move('turnRigh')
+				// 	alter.todo('turnRigh',1)
+				// }
+				// if(command=='a'){
+				// 	alter.move('turnLeft')
+				// 	alter.todo('turnLeft',1)		
+				// }
+				// if(command=='x'){
+				// 	alter.todo('hack',1)
+				// 	alter.move('hack')
+				// 	operators=alter.cast('hack') // !!!!!!!
+				// }
+				// if(command=='c'){
+				// 	alter.todo('swep',1)
+				// 	operators=alter.cast('swep') // !!!!!!!
+				// }
+				// if(command=='z'){
+				// 	alter.todo('spur',1)
+				// 	operators=alter.cast('spur') // !!!!!!!
+				// }
 			return operators
 		}
-		// ------------------------------
-		/* index.html 
-		function onKeyPress(event){
-			var operators
-			if(focusMan){
-				operators=focusMan.doSingleCommand(event.key)
-			}
-			if(operators){
-				operators.forEach(function(oper){
-					peoples.forEach(function(man){
-						if(man.position.equals(oper.position)){
-							man.health-=oper.damage
-							man.todo('beaten',1)
-						}
-					})
-				})
-			}
-			states=''
-			peoples.forEach(function(man){
-				states+=man.getStates()
-			})
-			console.log(states)
-		}
-		*/
 		return trunk
 	}
 	return Character;

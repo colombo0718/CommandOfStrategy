@@ -10,22 +10,30 @@
         {"key":"w","action":"walk"},
         {"key":"a","action":"turnLeft"},
         {"key":"d","action":"turnRigh"},
-        {"key":"x","action":"hack"}
+        {"key":"z","action":"spur"},
+        {"key":"x","action":"hack"},
+        {"key":"c","action":"swep"}
     ],
     "skills":[
-        {"name":"hack",
+        {
+            "name":"spur",
+            "command":"wwx",
             "operator":[
-                {"position":{"x": 0,"y":0,"z": 1,"d":0},"damage":1}
+                {"position":{"x": 0,"y":0,"z": 1,"d":0},"damage":10}
             ]
         },
-        {"name":"swep",
+        {
+            "name":"swep",
+            "command":"dx",
             "operator":[
                 {"position":{"x": 1,"y":0,"z": 1,"d":0},"damage":1},
                 {"position":{"x": 0,"y":0,"z": 1,"d":0},"damage":1},
                 {"position":{"x":-1,"y":0,"z": 1,"d":0},"damage":1}
             ]
         },
-        {"name":"spur",
+        {
+            "name":"hack",
+            "command":"x",
             "operator":[
                 {"position":{"x": 0,"y":0,"z": 1,"d":0},"damage":1}
             ]

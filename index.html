@@ -43,6 +43,8 @@
             import { Character } from './COS.js/Character.js';
             import { Accessory } from './COS.js/Accessory.js';
             import { EmptyMap,BuildField } from './COS.js/BattleField.js';
+            import { Compaign } from './COS.js/Compaign.js'; //!!!!!!!!!!!!!!!
+
             // import config from './test.js'
             // console.log(config)
 
@@ -94,16 +96,16 @@
                 // pointLight.position.set(5,5,5)
 
                 // try fs load json --------------
-                var compaign
-                compaign = JSON.parse(fs.readFileSync('story/train.json'))
-                // compaign = JSON.parse(fs.readFileSync('story/basic.json'))
+                var story
+                story = JSON.parse(fs.readFileSync('story/train.json'))
+                // story = JSON.parse(fs.readFileSync('story/basic.json'))
                 // build field --------------       
                 // field=new BuildField(a=new EmptyMap(50,50))
-                field=new BuildField(compaign.map)
+                field=new BuildField(story.map)
                 scene.add(field)
                 
                 // add characters from document
-                compaign.cha.forEach(function(doll){
+                story.cha.forEach(function(doll){
                     var cha=new Character(doll.name,doll.position,doll.carr,doll.camp)
                     cha.showMarks()
                     peoples.push(cha)
@@ -112,7 +114,7 @@
                 })
     
                 // add objects from document
-                compaign.obj.forEach(function(toy){
+                story.obj.forEach(function(toy){
                     var obj=new Accessory(toy.name,toy.position,toy.type)
                     things.push(obj)
                     scene.add(obj)
@@ -121,6 +123,9 @@
                 // add arrow test
                     // arr=things.findByName('a1')
                     // arr.scale.set(.125,.125,.125)
+
+                var epic = new Compaign('train')  //!!!!!!!!!!!!!!!!
+                console.log(epic)
 
                 // add selectors
                 selectors[0]=new Accessory('s0',{x: 0,y: 0,z: 0,d: 1},'posiSele')
