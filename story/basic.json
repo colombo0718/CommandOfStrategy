@@ -16,15 +16,15 @@
         [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1] 
     ],
     "obj":[
-        {"name":"t1","position":{"x": 0,"y":0,"z": 0,"d":1},"type":"torch"},
-        {"name":"t2","position":{"x": 0,"y":0,"z":11,"d":1},"type":"torch"},
-        {"name":"t3","position":{"x":20,"y":0,"z": 0,"d":1},"type":"torch"},
-        {"name":"t4","position":{"x":20,"y":0,"z":11,"d":1},"type":"torch"},
-        {"name":"f1","position":{"x": 4,"y":0,"z": 5,"d":1},"type":"flag-W"},
-        {"name":"f2","position":{"x":16,"y":0,"z": 5,"d":1},"type":"flag-G"},
-        {"name":"p1","position":{"x":10,"y":0,"z":11,"d":1},"type":"Parade1"},
-        {"name":"d1","position":{"x": 5,"y":0,"z":11,"d":1},"type":"drum"},
-        {"name":"d2","position":{"x":15,"y":0,"z":11,"d":1},"type":"drum"}
+        {"name":"t1","position":{"x": 0,"y":0,"z": 0,"d":0},"type":"torch"},
+        {"name":"t2","position":{"x": 0,"y":0,"z":11,"d":0},"type":"torch"},
+        {"name":"t3","position":{"x":20,"y":0,"z": 0,"d":0},"type":"torch"},
+        {"name":"t4","position":{"x":20,"y":0,"z":11,"d":0},"type":"torch"},
+        {"name":"f1","position":{"x": 4,"y":0,"z": 5,"d":0},"type":"flag-W"},
+        {"name":"f2","position":{"x":16,"y":0,"z": 5,"d":0},"type":"flag-G"},
+        {"name":"p1","position":{"x":10,"y":0,"z":11,"d":0},"type":"Parade1"},
+        {"name":"d1","position":{"x": 5,"y":0,"z":11,"d":0},"type":"drum"},
+        {"name":"d2","position":{"x":15,"y":0,"z":11,"d":0},"type":"drum"}
     ],
     "cha":[
         {"name":"Gf1","position":{"x":14,"y":0,"z":4,"d":-1},"carr":"Recruit","camp":"G"},

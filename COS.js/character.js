@@ -19,13 +19,13 @@ var Character=( function(){
 		var fs=require('fs') 
 		var careerData=JSON.parse(fs.readFileSync('./career/'+trunk.career+'.json'))
 		trunk.species=careerData.species
-		console.log(trunk.species)
 		trunk.health=careerData.health
 		trunk.stamina=careerData.stamina
 		trunk.weight=careerData.weight
 		trunk.signs=careerData.signs
+
 		// show file in directory 
-		fs.readdir("./career/",function(err,files){console.log(files)})
+		// fs.readdir("./career/",function(err,files){console.log(files)})
 
 
 		// load skeleton

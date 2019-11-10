@@ -32,7 +32,7 @@
                 <button>Enter</button>
             </p>
         </div>
-        <!-- <script src="https://code.jquery.com/jquery-3.4.1.js"></script>  -->
+        
 		<script type="module">
             // three.js module
 			import * as THREE from './COS.js/three.js/three.module.js';
@@ -42,23 +42,26 @@
             // COS.js module
             import { Character } from './COS.js/Character.js';
             import { Accessory } from './COS.js/Accessory.js';
-            import { EmptyMap,BuildField } from './COS.js/BattleField.js';
+            import { Territory } from './COS.js/Territory.js';
             import { Compaign } from './COS.js/Compaign.js'; //!!!!!!!!!!!!!!!
 
             // import config from './test.js'
             // console.log(config)
 
-			var container;
-			var camera, scene, renderer;
+			var container, renderer;
+			// var camera, scene;
             var clock = new THREE.Clock();
-            var peoples=[],things=[],selectors=[]//,marks=[]
-            var map,field
+            // var peoples=[],things=[],selectors=[]//,marks=[]
+            // var map,field
             var commandLine=document.getElementById("commandLine")
             var focusMan,focusObj
             var fs=require('fs')
             // console.log(fs)
             var a,states=''
             var arr= new THREE.Group();
+
+            var epic = new Compaign('train')  //!!!!!!!!!!!!!!!!
+            console.log(epic)
             
 
             document.getElementById("commandButton").addEventListener(
@@ -77,106 +80,37 @@
                 document.body.appendChild( container );
                 container.appendChild( renderer.domElement );
 
-				// scene
-                scene = new THREE.Scene();
-
-                // camera
-                camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight,0.1, 2000 );
-                camera.position.set(10,20,-20)
-                camera.rotateY(-Math.PI)
-                camera.rotateX(-2*Math.PI/8)
-                scene.add( camera );
-                
-                // lights
-				var ambientLight = new THREE.AmbientLight( 0xcccccc, 1);
-				scene.add( ambientLight );
-                
-				// var pointLight = new THREE.PointLight( 0xffffff, .3 );
-                // scene.add( pointLight );
-                // pointLight.position.set(5,5,5)
-
-                // try fs load json --------------
-                var story
-                story = JSON.parse(fs.readFileSync('story/train.json'))
-                // story = JSON.parse(fs.readFileSync('story/basic.json'))
-                // build field --------------       
-                // field=new BuildField(a=new EmptyMap(50,50))
-                field=new BuildField(story.map)
-                scene.add(field)
-                
-                // add characters from document
-                story.cha.forEach(function(doll){
-                    var cha=new Character(doll.name,doll.position,doll.carr,doll.camp)
-                    cha.showMarks()
-                    peoples.push(cha)
-                    scene.add(cha)
-                    scene.add(cha.markSpace)
-                })
-    
-                // add objects from document
-                story.obj.forEach(function(toy){
-                    var obj=new Accessory(toy.name,toy.position,toy.type)
-                    things.push(obj)
-                    scene.add(obj)
-                }) 
-                
-                // add arrow test
-                    // arr=things.findByName('a1')
-                    // arr.scale.set(.125,.125,.125)
-
-                var epic = new Compaign('train')  //!!!!!!!!!!!!!!!!
-                console.log(epic)
-
-                // add selectors
-                selectors[0]=new Accessory('s0',{x: 0,y: 0,z: 0,d: 1},'posiSele')
-                scene.add(selectors[0])
-                selectors[1]=new Accessory('s1',{x: 0,y: 0,z: 0,d: 1},'charSele')
-                scene.add(selectors[1])
-                selectors[2]=new Accessory('s2',{x: 0,y: 0,z: 0,d: 1},'objeSele')
-                scene.add(selectors[2])
-                
-                // user control react
                 document.oncontextmenu = new Function("return false;");
                 document.getElementById('cont').addEventListener('mousedown',onMouseDrag,false)
                 document.getElementById('cont').addEventListener('mousemove',onMouseDrag,false)
                 document.getElementById('cont').addEventListener('wheel',onMouseDrag,false)
                 window.addEventListener('resize',onWindowResize,false)
-                
                 document.addEventListener('keyup',onKeyPress,false)
             }
 
             function onMouseDrag(event){
-                if(event.deltaY>0 && camera.position.y<50){
-                    camera.position.y+=1
-                    camera.position.z-=1
+                if(event.deltaY>0 && epic.camera.position.y<50){
+                    epic.camera.position.y+=1
+                    epic.camera.position.z-=1
                 }
-                if(event.deltaY<0 && camera.position.y>2){
-                    camera.position.y-=1
-                    camera.position.z+=1
+                if(event.deltaY<0 && epic.camera.position.y>2){
+                    epic.camera.position.y-=1
+                    epic.camera.position.z+=1
                 }
                 if(event.which==3){
-                    camera.position.x+=event.movementX/50
-                    camera.position.z+=event.movementY/50
+                    epic.camera.position.x+=event.movementX/50
+                    epic.camera.position.z+=event.movementY/50
                 }
                 // raycaster ------------------
                 var raycaster = new THREE.Raycaster();
                 var mouse = new THREE.Vector2();
                 mouse.x = ( event.clientX / (window.innerWidth*.8) ) * 2 - 1;
                 mouse.y = - ( event.clientY / (window.innerHeight*.7) ) * 2 + 1;
-                raycaster.setFromCamera( mouse, camera );
-
-                var intersects = raycaster.intersectObjects( field.children )
+                raycaster.setFromCamera( mouse, epic.camera );
+                var intersects = raycaster.intersectObjects( epic.terrain.children)
+                // console.log(intersects.length)
                 if(intersects.length==1){
-                    selectors[0].position.copy(intersects[0].object.position)
-                }
-                
-                if(event.which==1){
-                    if(peoples.findByPosition(selectors[0].position)){
-                        focusMan=peoples.findByPosition(selectors[0].position)
-                    }
-                    if(things.findByPosition(selectors[0].position)){
-                        focusObj=things.findByPosition(selectors[0].position)
-                    }
+                    console.log(intersects[0].object.showSeletor(0x000000))
                 }
             }
 
@@ -206,76 +140,21 @@
                     states+=man.getStates()
                 })
                 console.log(states)
-                
-
-                if(event.key=='p'){
-                    arr.position.set(3,.5,0)
-                }
-            }
-
-
-            peoples.findByName=function(name){
-                var selectMan
-                this.forEach(function(man){
-                    if(man.name==name){selectMan=man}
-                });
-                return selectMan
-            }
-            peoples.findByPosition=function(position){
-                var selectMan
-                this.forEach(function(man){
-                    if(man.position.equals(position)){selectMan=man}
-                });
-                return selectMan
-            }
-            
-            things.findByName=function(name){
-                var selectObj
-                this.forEach(function(obj){
-                    if(obj.name==name){selectObj=obj}
-                });
-                return selectObj
-            }
-
-            things.findByPosition=function(position){
-                var selectObj
-                this.forEach(function(obj){
-                    if(obj.position.equals(position)){selectObj=obj}
-                });
-                return selectObj
             }
 
 			function animate() {				
-                var delta = clock.getDelta();
-                peoples.forEach(function(element) {
+                var delta = clock.getDelta();            
+                epic.peoples.children.forEach(function(element) {
                     if(element.mixer!=undefined){
                         element.mixer.update(delta)
                     }
                 });
-                // console.log(peoples[0].mixer.update(delta))
-                // if(arr.mixer!=undefined){
-                //     arr.mixer.update(delta)
-                // }
-                var v=10
-                if(Math.abs(arr.position.z-5)<.1){
-                    arr.position.z+=0
-                }else{arr.position.z+=v*delta}
-                // arr.position.z+=v*delta
-                arr.position.z
+                renderer.render( epic, epic.camera );
+                requestAnimationFrame( animate );  
                 
-                requestAnimationFrame( animate );
-				render();                
+                // console.log(epic.terrain.children[0])
             }
-            
-			function render() {        
-                renderer.render( scene, camera );
-                if(focusMan){
-                    selectors[1].position.copy(focusMan.position)  
-                }
-                if(focusObj){
-                    selectors[2].position.copy(focusObj.position) 
-                }  
-            }
+
             init();
             animate();
             
