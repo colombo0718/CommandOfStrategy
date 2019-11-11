@@ -22,7 +22,7 @@ var Compaign=( function(){
 
         // add ground by map
         var terrain=new Territory(story.map)
-        console.log(terrain.children)
+        console.log(terrain.sensors)
         scene.add(terrain)
 
         // add character from document
@@ -42,6 +42,19 @@ var Compaign=( function(){
             var obj=new Accessory(toy.name,toy.position,toy.type)
             things.add(obj)
         })
+        // -----------------
+        scene.whoIsThere=function(){}
+        scene.whaIsThere=function(){}
+        scene.HowIsThere=function(position){
+            var tile
+            terrain.bricks.children.forEach(function(object){
+                if(object.position.equals(position)){
+                    tile=object
+                }
+            })
+            console.log(tile)
+            return tile
+        }
         
         scene.camera =camera
         scene.peoples=peoples

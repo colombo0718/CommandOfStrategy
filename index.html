@@ -54,14 +54,15 @@
             // var peoples=[],things=[],selectors=[]//,marks=[]
             // var map,field
             var commandLine=document.getElementById("commandLine")
-            var focusMan,focusObj
+            var focusMan,focusObj,focusGnd
+            var tile
             var fs=require('fs')
             // console.log(fs)
             var a,states=''
             var arr= new THREE.Group();
 
             var epic = new Compaign('train')  //!!!!!!!!!!!!!!!!
-            console.log(epic)
+            // console.log(epic)
             
 
             document.getElementById("commandButton").addEventListener(
@@ -107,10 +108,20 @@
                 mouse.x = ( event.clientX / (window.innerWidth*.8) ) * 2 - 1;
                 mouse.y = - ( event.clientY / (window.innerHeight*.7) ) * 2 + 1;
                 raycaster.setFromCamera( mouse, epic.camera );
-                var intersects = raycaster.intersectObjects( epic.terrain.children)
+                // console.log( epic.terrain.sensors.children)
+                var intersects = raycaster.intersectObjects( epic.terrain.sensors.children)
                 // console.log(intersects.length)
                 if(intersects.length==1){
-                    console.log(intersects[0].object.showSeletor(0x000000))
+                    if(focusGnd!=intersects[0].object){
+                        // if(focusGnd){focusGnd.material.opacity=0}
+                        focusGnd=intersects[0].object
+                        // focusGnd.material.opacity=0
+                        // console.log(focusGnd.position.toArray())
+                        if(tile){tile.hideSeletor()}
+                        tile=epic.HowIsThere(focusGnd.position)
+                        console.log(tile)
+                        tile.showSeletor(0xffff00)
+                    }
                 }
             }
 
