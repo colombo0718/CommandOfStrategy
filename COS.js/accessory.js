@@ -20,7 +20,6 @@ var Accessory=( function(){
                 .setPath( './goods/' )
                 .load( type+'.obj', function ( object ) {
                     thing.rotateY( Math.PI/2*position.d)
-                    // thing.rotateY( Math.PI/2)
                     thing.add(object)
                 });
 
@@ -30,6 +29,22 @@ var Accessory=( function(){
             pointLight.position.set(0,1.5,0)
             thing.add( pointLight );
         }
+
+        new OBJLoader()
+			.setPath( './goods/' )
+			.load('objeSele.obj', function ( selector ) {
+				selector.children[0].material.color.set(0xff0000)
+				selector.visible=false
+				thing.add(selector);
+				thing.selector=selector
+			});
+        thing.showSeletor=function(color){
+			this.selector.visible=true
+			this.selector.children[0].material.color.set(color)
+		}  
+		thing.hideSeletor=function(color){
+			this.selector.visible=false
+		}
 
 		return thing
 	}

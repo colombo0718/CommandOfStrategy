@@ -63,6 +63,7 @@ var Character=( function(){
 
 		// build MarkSpace and Marks ------------------------------
 		trunk.markSpace=new THREE.Group()
+		trunk.markSpace.name='markspace'
 
 		var geometry = new THREE.SphereGeometry( .08, 8, 8);
 		var material = new THREE.MeshLambertMaterial( {color: 0x0000ff} );
@@ -118,6 +119,24 @@ var Character=( function(){
 		trunk.hideMarks=function(){
 			this.markSpace.visible=false
 		}
+		// add selector to markSpace -------------
+		new OBJLoader()
+			.setPath( './goods/' )
+			.load('charSele.obj', function ( selector ) {
+				selector.children[0].material.color.set(0xff0000)
+				selector.visible=false
+				selector.rotateX(Math.PI/2)
+				trunk.add(selector);
+				trunk.selector=selector
+			});
+		trunk.showSeletor=function(color){
+			this.selector.visible=true
+			this.selector.children[0].material.color.set(color)
+		}  
+		trunk.hideSeletor=function(color){
+			this.selector.visible=false
+		}
+
 
 		// add character camp signs ----------
 		var campcolor=0xffffff
@@ -197,16 +216,15 @@ var Character=( function(){
 			alter.actions[name].setEffectiveWeight(0).reset()
 			alter.actions[name].setEffectiveWeight(1).play()
 			alter.doing=name
-			if(alter.health>0){alter.showMarks()}
+			if(alter.health>=0){alter.showMarks()}
 
 			if(name!=alter.defaultAction){
 				alter.control=true
 				setTimeout(function(){
 					alter.todo(alter.defaultAction)
 					alter.control=false
-
 					// if character died
-					if(alter.health<0){
+					if(alter.health<=0){
 						alter.todo('dead')
 						alter.control=true
 						// play dead after beaten

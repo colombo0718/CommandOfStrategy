@@ -45,24 +45,11 @@
             import { Territory } from './COS.js/Territory.js';
             import { Compaign } from './COS.js/Compaign.js'; //!!!!!!!!!!!!!!!
 
-            // import config from './test.js'
-            // console.log(config)
-
 			var container, renderer;
-			// var camera, scene;
             var clock = new THREE.Clock();
-            // var peoples=[],things=[],selectors=[]//,marks=[]
-            // var map,field
             var commandLine=document.getElementById("commandLine")
-            var focusMan,focusObj,focusGnd
-            var tile
-            var fs=require('fs')
-            // console.log(fs)
-            var a,states=''
-            var arr= new THREE.Group();
-
+            var focusMan,focusObj,focusGnd,TouchPosi
             var epic = new Compaign('train')  //!!!!!!!!!!!!!!!!
-            // console.log(epic)
             
 
             document.getElementById("commandButton").addEventListener(
@@ -90,6 +77,7 @@
             }
 
             function onMouseDrag(event){
+                // move camera -----------------------
                 if(event.deltaY>0 && epic.camera.position.y<50){
                     epic.camera.position.y+=1
                     epic.camera.position.z-=1
@@ -108,26 +96,37 @@
                 mouse.x = ( event.clientX / (window.innerWidth*.8) ) * 2 - 1;
                 mouse.y = - ( event.clientY / (window.innerHeight*.7) ) * 2 + 1;
                 raycaster.setFromCamera( mouse, epic.camera );
-                // console.log( epic.terrain.sensors.children)
                 var intersects = raycaster.intersectObjects( epic.terrain.sensors.children)
-                // console.log(intersects.length)
                 if(intersects.length==1){
-                    if(focusGnd!=intersects[0].object){
-                        // if(focusGnd){focusGnd.material.opacity=0}
-                        focusGnd=intersects[0].object
-                        // focusGnd.material.opacity=0
-                        // console.log(focusGnd.position.toArray())
-                        if(tile){tile.hideSeletor()}
-                        tile=epic.HowIsThere(focusGnd.position)
-                        console.log(tile)
-                        tile.showSeletor(0xffff00)
+                    if(TouchPosi!=intersects[0].object){
+                        if(TouchPosi){TouchPosi.material.opacity=0}
+                        TouchPosi=intersects[0].object
+                        TouchPosi.material.opacity=.5
+                    }
+                }
+                // when mouse click ----------------------
+                if(event.which==1){
+                    if(epic.howIsThere(TouchPosi.position)){
+                        if(focusGnd){focusGnd.hideSeletor()}
+                        focusGnd=epic.howIsThere(TouchPosi.position)
+                        focusGnd.showSeletor(0xffff00)
+                    }
+                    if(epic.whoIsThere(TouchPosi.position)){
+                        if(focusMan){focusMan.hideSeletor()}
+                        focusMan=epic.whoIsThere(TouchPosi.position)
+                        focusMan.showSeletor(0xff00ff)
+                    }
+                    if(epic.whaIsThere(TouchPosi.position)){
+                        if(focusObj){focusObj.hideSeletor()}
+                        focusObj=epic.whaIsThere(TouchPosi.position)
+                        focusObj.showSeletor(0x00ffff)
                     }
                 }
             }
 
             function onWindowResize(){
-                camera.aspect=window.innerWidth/window.innerHeight
-                camera.updateProjectionMatrix()
+                epic.camera.aspect=window.innerWidth/window.innerHeight
+                epic.camera.updateProjectionMatrix()
                 renderer.setSize(window.innerWidth*.8,window.innerHeight*.7)
             }
 
@@ -138,7 +137,7 @@
                 }
                 if(operators){
                     operators.forEach(function(oper){
-                        peoples.forEach(function(man){
+                        epic.peoples.children.forEach(function(man){
                             if(man.position.equals(oper.position)){
                                 man.health-=oper.damage
                                 man.todo('beaten',1)
@@ -146,8 +145,8 @@
                         })
                     })
                 }
-                states=''
-                peoples.forEach(function(man){
+                var states=''
+                epic.peoples.children.forEach(function(man){
                     states+=man.getStates()
                 })
                 console.log(states)
@@ -161,9 +160,7 @@
                     }
                 });
                 renderer.render( epic, epic.camera );
-                requestAnimationFrame( animate );  
-                
-                // console.log(epic.terrain.children[0])
+                requestAnimationFrame( animate );
             }
 
             init();

@@ -24,7 +24,7 @@ var Territory=( function(){
         }
         for(var j=0;j<map.length;j++){
             for(var i=0;i<map[0].length;i++){
-                var a=addTile(i,j,map[j][i],sensors)
+                addTile(i,j,map[j][i],sensors)
             }
         }
         terrain.add(sensors)
@@ -48,7 +48,6 @@ var Territory=( function(){
                             new OBJLoader()
                             	.setPath( './goods/' )
                             	.load('posiSele.obj', function ( selector ) {
-                                    selector.children[0].material.color.set(0xff0000)
                                     selector.visible=false
                                     tile.add(selector);
                                     tile.selector=selector
@@ -66,7 +65,7 @@ var Territory=( function(){
         }
         for(var j=0;j<map.length;j++){
             for(var i=0;i<map[0].length;i++){
-                var a=addTile(i,j,map[j][i],bricks)
+                addTile(i,j,map[j][i],bricks)
             }
         }
         terrain.add(bricks)
