@@ -8,6 +8,7 @@ let { app, protocol, BrowserWindow } = require("electron");
 const fs = require("fs");
 let { extname } = require("path");
 let { URL } = require("url");
+var path = require('path')
 
 const checkImportRegex = /import(\s*{?\*?[\s\w,$]*}?\s*(as)?[\s\w]*from\s|[\s]*)['\"]([^\.\/][\w\/\-@.]*?)['\"]/g;
 let checkRelativeImportRegex = new RegExp("import(\\s*{?\\*?[\\s\\w,$]*}?\\s*(as)?[\\s\\w]*from\\s|[\\s]*)['\\\"]([\\.\\/][\\w\\/\\-@.]*?)['\\\"]", 'g');
@@ -143,7 +144,8 @@ async function createWindow() {
         width: 2000, height: 1024, frame: true, webPreferences: {
             nodeIntegration: true,
             devTools: true
-        }
+        },
+        icon: path.join(__dirname, 'icon.ico')
     })
 
     // Öffnen der DevTools.

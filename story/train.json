@@ -1,6 +1,10 @@
 {
     "type":"compaign",
     "name":"basic",
+    "attend":[
+        {"camp":"B","type":"humanity"},
+        {"camp":"M","type":"computer"}
+    ],
     "map":[
         [1,1,1,1,1,1,1],
         [1,1,1,1,1,1,1],

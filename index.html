@@ -36,13 +36,6 @@
 		<script type="module">
             // three.js module
 			import * as THREE from './COS.js/three.js/three.module.js';
-			import { MTLLoader } from './COS.js/three.js/MTLLoader.js';
-			import { OBJLoader } from './COS.js/three.js/OBJLoader.js';
-            import { BVHLoader } from './COS.js/three.js/BVHLoader.js';
-            // COS.js module
-            import { Character } from './COS.js/Character.js';
-            import { Accessory } from './COS.js/Accessory.js';
-            import { Territory } from './COS.js/Territory.js';
             import { Compaign } from './COS.js/Compaign.js'; //!!!!!!!!!!!!!!!
 
 			var container, renderer;
@@ -50,7 +43,6 @@
             var commandLine=document.getElementById("commandLine")
             var focusMan,focusObj,focusGnd,TouchPosi
             var epic = new Compaign('train')  //!!!!!!!!!!!!!!!!
-            
 
             document.getElementById("commandButton").addEventListener(
                 'click',function(){
@@ -131,20 +123,8 @@
             }
 
             function onKeyPress(event){
-                var operators
-                if(focusMan){
-                    operators=focusMan.doSingleCommand(event.key)
-                }
-                if(operators){
-                    operators.forEach(function(oper){
-                        epic.peoples.children.forEach(function(man){
-                            if(man.position.equals(oper.position)){
-                                man.health-=oper.damage
-                                man.todo('beaten',1)
-                            }
-                        })
-                    })
-                }
+                epic.getInput(0,event.key)
+                
                 var states=''
                 epic.peoples.children.forEach(function(man){
                     states+=man.getStates()

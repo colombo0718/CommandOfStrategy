@@ -14,7 +14,7 @@ var Character=( function(){
 		if(trunk.position.d<0){trunk.position.d+=4}
 		trunk.career=career
 		trunk.camp=camp
-		trunk.control=false 
+		trunk.running=false 
 		// set default parameter from document
 		var fs=require('fs') 
 		var careerData=JSON.parse(fs.readFileSync('./career/'+trunk.career+'.json'))
@@ -219,14 +219,14 @@ var Character=( function(){
 			if(alter.health>=0){alter.showMarks()}
 
 			if(name!=alter.defaultAction){
-				alter.control=true
+				alter.running=true
 				setTimeout(function(){
 					alter.todo(alter.defaultAction)
-					alter.control=false
+					alter.running=false
 					// if character died
 					if(alter.health<=0){
 						alter.todo('dead')
-						alter.control=true
+						alter.running=true
 						// play dead after beaten
 						setTimeout(function(){
 							alter.actions['dead'].paused=true
@@ -368,7 +368,7 @@ var Character=( function(){
 		trunk.doSingleCommand=function(command,callback){
 			var alter=this
 			var operators
-			if(alter.control){return}
+			if(alter.running){return}
 				careerData.orders.forEach(function(ord){
 					if(ord.key==command){
 						alter.move(ord.action)             

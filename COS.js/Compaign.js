@@ -1,4 +1,6 @@
 import * as THREE from './three.js/three.module.js';
+import { MTLLoader } from './three.js/MTLLoader.js';
+import { OBJLoader } from './three.js/OBJLoader.js';
 import { Character } from './Character.js';
 import { Accessory } from './Accessory.js';
 import { Territory } from './Territory.js';
@@ -8,7 +10,7 @@ var Compaign=( function(){
     function Compaign(storyName){
         var fs=require('fs')
         var story = JSON.parse(fs.readFileSync('story/'+storyName+'.json'))
-        // var story = JSON.parse(fs.readFileSync('story/train.json'))
+        // var story = JSON.parse(fs.readFileSync('story/basic.json'))
 
         var scene=new THREE.Scene();
         var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight,0.1, 2000 );
@@ -71,6 +73,46 @@ var Compaign=( function(){
             return tile
         }
         // ---------------------------------
+        var attend=story.attend
+        attend.forEach(function(player){
+            peoples.children.forEach(function(man){
+                if(man.camp==player.camp)
+                player.control=man
+            })
+            new MTLLoader()
+                .setPath( './marks/' )
+                .load( 'token-R.mtl', function ( materials ) {
+                    materials.preload();
+                    new OBJLoader()
+                        .setMaterials( materials )
+                        .setPath( './marks/' )
+                        .load( 'token-'+player.camp+'.obj', function ( object ) {
+                            object.position.copy(player.control.position)
+                            object.scale.set(.25,.25,.25)
+                            scene.add(object);
+                            player.token=object
+                        });
+                });
+        })
+        // ------------------------------
+        scene.getInput=function(num,key){ // num = player nymber
+            if(attend[num].control.running){
+                console.log("character is still running")
+            }
+            var operators=attend[num].control.doSingleCommand(key)
+            attend[num].token.position.copy(attend[num].control.position)
+            if(operators){
+                operators.forEach(function(oper){
+                    peoples.children.forEach(function(man){
+                        if(man.position.equals(oper.position)){
+                            man.health-=oper.damage
+                            man.todo('beaten',1)
+                        }
+                    })
+                })
+            }
+        }
+        // ------------------------------
         scene.camera =camera
         scene.peoples=peoples
         scene.things =things
