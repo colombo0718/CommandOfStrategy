@@ -72,13 +72,25 @@ var Compaign=( function(){
             })
             return tile
         }
-        // ---------------------------------
+        // do the operator
+        scene.execute=function(operators){
+            operators.forEach(function(oper){
+                peoples.children.forEach(function(man){
+                    if(man.position.equals(oper.position)){
+                        man.health-=oper.damage
+                        man.todo('beaten',1)
+                    }
+                })
+            })
+        }
+
+        // make token for each palyer ----------------------------
         var attend=story.attend
         attend.forEach(function(player){
-            peoples.children.forEach(function(man){
-                if(man.camp==player.camp)
-                player.control=man
-            })
+            // peoples.children.forEach(function(man){
+            //     if(man.camp==player.camp)
+            //     player.control=man
+            // })
             new MTLLoader()
                 .setPath( './marks/' )
                 .load( 'token-R.mtl', function ( materials ) {
@@ -87,7 +99,7 @@ var Compaign=( function(){
                         .setMaterials( materials )
                         .setPath( './marks/' )
                         .load( 'token-'+player.camp+'.obj', function ( object ) {
-                            object.position.copy(player.control.position)
+                            // object.position.copy(player.control.position)
                             object.scale.set(.25,.25,.25)
                             scene.add(object);
                             player.token=object
@@ -95,43 +107,79 @@ var Compaign=( function(){
                 });
         })
         // ------------------------------
-        var trend=0
-        scene.getInput=function(key){ // num = player nymber
-            
-            if(attend[trend].control.running){
+        scene.round=1
+        scene.trend=0
+        scene.getInput=function(num,comm,focusMan){ // num = player nymber
+            // check the trend is on you
+            if(num!=scene.trend){
+                return "the trend is not on you"
+            }
+            // begining of one trend no one in control
+            if(attend[scene.trend].control==undefined){
+
+                if(focusMan==undefined){
+                    return "don't know who you want to control"
+                }
+
+                if(focusMan.camp!=attend[scene.trend].camp){
+                    return "you can't control this character"
+                }
+
+                if(focusMan.stamina==0){
+                    return "the character is tired"
+                }
+
+                attend[scene.trend].control=focusMan
+                attend[scene.trend].control.markSpace.add(attend[scene.trend].token)
+            }
+
+            if(attend[scene.trend].control.running){
                 return "character is still running"
             }
 
-            var operators=attend[trend].control.doSingleCommand(key)
-            attend[trend].token.position.copy(attend[trend].control.position)
-            if(operators){
-                operators.forEach(function(oper){
-                    peoples.children.forEach(function(man){
-                        if(man.position.equals(oper.position)){
-                            man.health-=oper.damage
-                            man.todo('beaten',1)
-                        }
-                    })
-                })
-            }
+            // do commend release and run operator 
+            var operators=attend[scene.trend].control.doSingleCommand(comm)
+            // attend[trend].token.position.copy(attend[trend].control.position)
+            if(operators){scene.execute(operators)}
             
-            if(attend[trend].control.stamina<=0){
-                trend+=1
-                if(trend>=attend.length){trend=0}
+            // present player finish 
+            if(attend[scene.trend].control.stamina<=0){
+                attend[scene.trend].control=undefined
+                // attend[scene.trend].token.visible=false
+                scene.add(attend[scene.trend].token)
+                scene.trend+=1
+                if(scene.trend>=attend.length){scene.trend=0;scene.round+=1}
             }
-            
+
+            // collecting compaign information
             var states=''
             peoples.children.forEach(function(man){
                 states+=man.getStates()
             })
+
+            // check all people is tired 
+            var endround=true
+
+            scene.peoples.children.forEach(function(man){
+                if(man.stamina>0){endround=false}
+            })
+            if(endround){
+                scene.round+=1
+                scene.peoples.children.forEach(function(man){
+                    man.stamina=man.maxStamina
+                    man.showMarks()
+                })
+            }
+
             return states
         }
         // ------------------------------
 
-        scene.camera =camera
-        scene.peoples=peoples
-        scene.things =things
-        scene.terrain=terrain
+        scene.camera = camera
+        scene.peoples= peoples
+        scene.things = things
+        scene.terrain= terrain
+        scene.attend = attend
         return scene
     }
 	return Compaign;

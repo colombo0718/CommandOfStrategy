@@ -123,13 +123,8 @@
             }
 
             function onKeyPress(event){
-                epic.getInput(event.key)
-                
-                // var states=''
-                // epic.peoples.children.forEach(function(man){
-                //     states+=man.getStates()
-                // })
-                // console.log(states)
+                var state=epic.getInput(epic.trend,event.key,focusMan)
+                console.log(state)
             }
 
 			function animate() {				
