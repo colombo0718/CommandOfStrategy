@@ -7,12 +7,12 @@
     "signs":["midbun","scarf"],
     "gears":[["sword","53"]],
     "orders":[
-        {"key":"w","action":"walk"},
-        {"key":"a","action":"turnLeft"},
-        {"key":"d","action":"turnRigh"},
-        {"key":"z","action":"spur"},
-        {"key":"x","action":"hack"},
-        {"key":"c","action":"swep"}
+        {"key":"w","action":"walk","consume":1},
+        {"key":"a","action":"turnLeft","consume":1},
+        {"key":"d","action":"turnRigh","consume":1},
+        {"key":"z","action":"spur","consume":1},
+        {"key":"x","action":"hack","consume":1},
+        {"key":"c","action":"swep","consume":1}
     ],
     "skills":[
         {

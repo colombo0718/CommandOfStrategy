@@ -95,12 +95,15 @@ var Compaign=( function(){
                 });
         })
         // ------------------------------
-        scene.getInput=function(num,key){ // num = player nymber
-            if(attend[num].control.running){
-                console.log("character is still running")
+        var trend=0
+        scene.getInput=function(key){ // num = player nymber
+            
+            if(attend[trend].control.running){
+                return "character is still running"
             }
-            var operators=attend[num].control.doSingleCommand(key)
-            attend[num].token.position.copy(attend[num].control.position)
+
+            var operators=attend[trend].control.doSingleCommand(key)
+            attend[trend].token.position.copy(attend[trend].control.position)
             if(operators){
                 operators.forEach(function(oper){
                     peoples.children.forEach(function(man){
@@ -111,8 +114,20 @@ var Compaign=( function(){
                     })
                 })
             }
+            
+            if(attend[trend].control.stamina<=0){
+                trend+=1
+                if(trend>=attend.length){trend=0}
+            }
+            
+            var states=''
+            peoples.children.forEach(function(man){
+                states+=man.getStates()
+            })
+            return states
         }
         // ------------------------------
+
         scene.camera =camera
         scene.peoples=peoples
         scene.things =things

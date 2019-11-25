@@ -12,7 +12,7 @@
         <div id="cont"></div>
         <div id="info" class="ui"><h4>[資訊]</h4>
             <p>== 天 ==</p>
-                <p>時辰：卯時<br>天氣：晴朗</p><br>
+                <p>局勢：藍軍<br>時辰：卯時<br>天氣：晴朗</p><br>
             <p>== 地 ==</p>
                 <p>地形：砂土</p><br>
             <p>== 人 ==</p>
@@ -123,13 +123,13 @@
             }
 
             function onKeyPress(event){
-                epic.getInput(0,event.key)
+                epic.getInput(event.key)
                 
-                var states=''
-                epic.peoples.children.forEach(function(man){
-                    states+=man.getStates()
-                })
-                console.log(states)
+                // var states=''
+                // epic.peoples.children.forEach(function(man){
+                //     states+=man.getStates()
+                // })
+                // console.log(states)
             }
 
 			function animate() {				

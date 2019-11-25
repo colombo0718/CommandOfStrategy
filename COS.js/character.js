@@ -20,6 +20,7 @@ var Character=( function(){
 		var careerData=JSON.parse(fs.readFileSync('./career/'+trunk.career+'.json'))
 		trunk.species=careerData.species
 		trunk.health=careerData.health
+		trunk.MaxStamina=careerData.stamina
 		trunk.stamina=careerData.stamina
 		trunk.weight=careerData.weight
 		trunk.signs=careerData.signs
@@ -368,42 +369,15 @@ var Character=( function(){
 		trunk.doSingleCommand=function(command,callback){
 			var alter=this
 			var operators
-			if(alter.running){return}
+			// if(alter.running){return}
 				careerData.orders.forEach(function(ord){
 					if(ord.key==command){
+						alter.stamina-=ord.consume
 						alter.move(ord.action)             
 						alter.todo(ord.action)
 						operators=alter.cast(ord.action)
 					}
 				})
-				// if(command=='w' ){  
-				// 	alter.move('walk')             
-				// 	alter.todo('walk',1)
-				// }
-				// if(command=='s'){
-				// 	alter.todo('salute',1)
-				// }
-				// if(command=='d'){
-				// 	alter.move('turnRigh')
-				// 	alter.todo('turnRigh',1)
-				// }
-				// if(command=='a'){
-				// 	alter.move('turnLeft')
-				// 	alter.todo('turnLeft',1)		
-				// }
-				// if(command=='x'){
-				// 	alter.todo('hack',1)
-				// 	alter.move('hack')
-				// 	operators=alter.cast('hack') // !!!!!!!
-				// }
-				// if(command=='c'){
-				// 	alter.todo('swep',1)
-				// 	operators=alter.cast('swep') // !!!!!!!
-				// }
-				// if(command=='z'){
-				// 	alter.todo('spur',1)
-				// 	operators=alter.cast('spur') // !!!!!!!
-				// }
 			return operators
 		}
 		return trunk
