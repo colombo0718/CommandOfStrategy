@@ -28,7 +28,7 @@
         <div id="dial" class="ui"><h4>[對話]</h4>
             <p>主帥：對戰開始</p>
             <p style="position:absolute; bottom:0px; width:100%; font-weight:bold;">
-                指令:<input type="text" onkeypress="" id='commandLine'>
+                指令:<input type="text" id='inputArea'>
                 <button>Enter</button>
             </p>
         </div>
@@ -36,13 +36,14 @@
 		<script type="module">
             // three.js module
 			import * as THREE from './COS.js/three.js/three.module.js';
-            import { Compaign } from './COS.js/Compaign.js'; //!!!!!!!!!!!!!!!
+            import { Compaign } from './COS.js/Compaign.js'; 
 
 			var container, renderer;
             var clock = new THREE.Clock();
-            var commandLine=document.getElementById("commandLine")
+            var inputArea=document.getElementById("inputArea")
             var focusMan,focusObj,focusGnd,TouchPosi
-            var epic = new Compaign('train')  //!!!!!!!!!!!!!!!!
+            var epic = new Compaign('train')  
+            var inputAreaFocus=false
 
             document.getElementById("commandButton").addEventListener(
                 'click',function(){
@@ -66,6 +67,8 @@
                 document.getElementById('cont').addEventListener('wheel',onMouseDrag,false)
                 window.addEventListener('resize',onWindowResize,false)
                 document.addEventListener('keyup',onKeyPress,false)
+                inputArea.addEventListener("focusin",function(){inputAreaFocus=true})
+                inputArea.addEventListener("focusout",function(){inputAreaFocus=false})
             }
 
             function onMouseDrag(event){
@@ -123,8 +126,12 @@
             }
 
             function onKeyPress(event){
-                var state=epic.getInput(epic.trend,event.key,focusMan)
-                console.log(state)
+                if(!inputAreaFocus){
+                    var state=epic.getInput(epic.trend,event.key,focusMan)
+                    console.log(state)
+                }
+                
+                
             }
 
 			function animate() {				

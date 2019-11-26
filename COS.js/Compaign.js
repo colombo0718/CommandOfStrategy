@@ -72,7 +72,7 @@ var Compaign=( function(){
             })
             return tile
         }
-        // do the operator
+        // do the operator -------------------------
         scene.execute=function(operators){
             operators.forEach(function(oper){
                 peoples.children.forEach(function(man){
@@ -99,7 +99,7 @@ var Compaign=( function(){
                         .setMaterials( materials )
                         .setPath( './marks/' )
                         .load( 'token-'+player.camp+'.obj', function ( object ) {
-                            // object.position.copy(player.control.position)
+                            object.visible=false
                             object.scale.set(.25,.25,.25)
                             scene.add(object);
                             player.token=object
@@ -131,21 +131,21 @@ var Compaign=( function(){
 
                 attend[scene.trend].control=focusMan
                 attend[scene.trend].control.markSpace.add(attend[scene.trend].token)
+                attend[scene.trend].token.visible=true
             }
-
+            // animation playing
             if(attend[scene.trend].control.running){
                 return "character is still running"
             }
 
             // do commend release and run operator 
             var operators=attend[scene.trend].control.doSingleCommand(comm)
-            // attend[trend].token.position.copy(attend[trend].control.position)
             if(operators){scene.execute(operators)}
             
             // present player finish 
             if(attend[scene.trend].control.stamina<=0){
                 attend[scene.trend].control=undefined
-                // attend[scene.trend].token.visible=false
+                attend[scene.trend].token.visible=false
                 scene.add(attend[scene.trend].token)
                 scene.trend+=1
                 if(scene.trend>=attend.length){scene.trend=0;scene.round+=1}
