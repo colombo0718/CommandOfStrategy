@@ -249,7 +249,9 @@ var Character=( function(){
 				states+=this.position.z+','
 			if(this.position.d<10){states+=0}
 				states+=this.position.d+','
-			if(this.health<10){states+=0}
+			if(this.stamina<10)   {states+=0}
+				states+=this.stamina+','
+			if(this.health<10)    {states+=0}
 				states+=this.health
 			states+='|'
 			// console.log(0+this.position.x.toString())

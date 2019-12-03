@@ -10,7 +10,7 @@ var Compaign=( function(){
     function Compaign(storyName){
         var fs=require('fs')
         var story = JSON.parse(fs.readFileSync('story/'+storyName+'.json'))
-        // var story = JSON.parse(fs.readFileSync('story/basic.json'))
+        var story = JSON.parse(fs.readFileSync('story/basic.json'))
 
         var scene=new THREE.Scene();
         var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight,0.1, 2000 );
@@ -31,9 +31,16 @@ var Compaign=( function(){
         scene.add(peoples)
         story.cha.forEach(function(doll){
             var cha=new Character(doll.name,doll.position,doll.carr,doll.camp)
-            cha.showMarks()
+            // add camp data to character
+            cha.type="decorate"
+            story.attend.forEach(function(player){
+                if(player.camp==cha.camp){cha.type=player.type}
+            })
             peoples.add(cha)
-            scene.add(cha.markSpace)
+            if(cha.type!="decorate"){
+                cha.showMarks()
+                scene.add(cha.markSpace)
+            }
         })
 
         // add objects from document
@@ -76,7 +83,7 @@ var Compaign=( function(){
         scene.execute=function(operators){
             operators.forEach(function(oper){
                 peoples.children.forEach(function(man){
-                    if(man.position.equals(oper.position)){
+                    if(man.position.equals(oper.position)&& man.type!="decorate"){
                         man.health-=oper.damage
                         man.todo('beaten',1)
                     }
@@ -161,7 +168,7 @@ var Compaign=( function(){
             var endround=true
 
             scene.peoples.children.forEach(function(man){
-                if(man.stamina>0){endround=false}
+                if(man.type!="decorate" && man.stamina>0){endround=false}
             })
             if(endround){
                 scene.round+=1
