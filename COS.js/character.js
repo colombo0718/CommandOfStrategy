@@ -6,6 +6,7 @@ import { BVHLoader } from './three.js/BVHLoader.js';
 var Character=( function(){
 	function Character(name,position,career,camp){
 		var trunk= new THREE.Group();
+		trunk.record='' // success keyinput record
 		// set parameter from call function
 		trunk.name=name
 		trunk.position.copy(position)
@@ -167,28 +168,43 @@ var Character=( function(){
 			});
 				
 		// moves ------------------
-		trunk.move=function(name){
+		trunk.relaToAbso=function(rela){
+			var cos=1,sin=0
+			if(this.position.d==1){cos= 0,sin= 1}
+			if(this.position.d==2){cos=-1,sin= 0}
+			if(this.position.d==3){cos= 0,sin=-1}
+			var abso={x: 0,y:0,z: 0,d:0}
+			abso.x=this.position.x+rela.z*sin+rela.x*cos
+			abso.y=this.position.y+rela.y
+			abso.z=this.position.z+rela.z*cos-rela.x*sin
+			abso.d=this.position.d+rela.d
+			abso.d=abso.d%4
+			if(abso.d<0){abso.d+=4}
+			return abso
+		}
+
+		trunk.goal=function(command){
+			var alter=this
+			var absolute
+			careerData.orders.forEach(function(ord){
+				if(ord.key==command){
+					absolute=alter.relaToAbso(ord.differ)	
+				}
+			})
+			return absolute
+		}
+
+		trunk.move=function(differ){
 			var alter=this
 			alter.position.d=alter.position.d%4
 			if(alter.position.d<0){alter.position.d+=4}
-			switch(name){
-				case "walk":
-					if(alter.position.d==0){alter.position.z+=1}
-					if(alter.position.d==1){alter.position.x+=1}
-					if(alter.position.d==2){alter.position.z-=1}
-					if(alter.position.d==3){alter.position.x-=1}
-					break;
-				case "turnRigh":
-					alter.rotateZ(-Math.PI/2)
-					alter.position.d-=1
-					break;
-				case "turnLeft":
-					alter.rotateZ(Math.PI/2)
-					alter.position.d+=1
-					break;
-			}
-			alter.position.d=alter.position.d%4
-			if(alter.position.d<0){alter.position.d+=4}
+			var newPosition
+			newPosition=alter.relaToAbso(differ)
+			alter.position.x=newPosition.x
+			alter.position.y=newPosition.y
+			alter.position.z=newPosition.z
+			alter.position.d=newPosition.d
+			trunk.rotation.z=Math.PI/2*alter.position.d
 		}
 
 		// actions ------------
@@ -207,7 +223,7 @@ var Character=( function(){
 						trunk.mixer.clipAction( result.clip ).setEffectiveWeight(1).play()
 						trunk.doing=trunk.defaultAction
 					}
-				} );
+				});
 			}
 		)
 
@@ -258,8 +274,7 @@ var Character=( function(){
 			return states
 		}
 
-		//  cast skills ---------------------
-
+		//  cast skills and influnced by skill ---------------------
 		trunk.cast=function(skillname){
 			var alter=this
 			var relative
@@ -275,22 +290,17 @@ var Character=( function(){
 			alter.position.d=alter.position.d%4
 			if(alter.position.d<0){alter.position.d+=4}
 			if(!relative){return}
-			relative.forEach(function(oper){
-				// console.log(oper)
-				var cos=1,sin=0
-				if(alter.position.d==1){cos= 0,sin= 1}
-				if(alter.position.d==2){cos=-1,sin= 0}
-				if(alter.position.d==3){cos= 0,sin=-1}
-				// deep copy
-				var oper1={position:{x: 0,y:0,z: 0,d:0},damage:oper.damage}
-				oper1.position.x=oper.position.z*sin+oper.position.x*cos+alter.position.x
-				oper1.position.y=oper.position.y+alter.position.y
-				oper1.position.z=oper.position.z*cos-oper.position.x*sin+alter.position.z
-				oper1.position.d=oper.position.d+alter.position.d
-				absolute.push(oper1)
+			relative.forEach(function(rela){
+				var abso={aim:{x: 0,y:0,z: 0,d:0},effect:rela.effect}
+				abso.aim=alter.relaToAbso(rela.aim)
+				absolute.push(abso)
 			})
-			// console.log(absolute)
 			return absolute		
+		}
+
+		trunk.influ=function(effect){
+			var alter=this
+			alter.health+=effect.h
 		}
 
 		// effects ---------------------------
@@ -371,11 +381,11 @@ var Character=( function(){
 		trunk.doSingleCommand=function(command,callback){
 			var alter=this
 			var operators
-			// if(alter.running){return}
 				careerData.orders.forEach(function(ord){
+					
 					if(ord.key==command){
-						alter.stamina-=ord.consume
-						alter.move(ord.action)             
+						alter.stamina+=ord.differ.s
+						alter.move(ord.differ)             
 						alter.todo(ord.action)
 						operators=alter.cast(ord.action)
 					}

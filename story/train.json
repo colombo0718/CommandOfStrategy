@@ -46,7 +46,7 @@
         {"name":"t1","position":{"x": 6,"y":0,"z": 0,"d":1},"type":"torch"}
     ],
     "cha":[
-        {"name":"Bf1","position":{"x":3,"y":0,"z":2,"d":0},"carr":"Recruit","camp":"B"},
-        {"name":"Mf1","position":{"x":3,"y":0,"z":3,"d":2},"carr":"Recruit","camp":"M"}
+        {"name":"Bf1","position":{"x":3,"y":0,"z":2,"d":1},"carr":"Recruit","camp":"B"},
+        {"name":"Mf1","position":{"x":3,"y":0,"z":3,"d":1},"carr":"Recruit","camp":"M"}
     ]   
 }

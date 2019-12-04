@@ -10,7 +10,7 @@ var Compaign=( function(){
     function Compaign(storyName){
         var fs=require('fs')
         var story = JSON.parse(fs.readFileSync('story/'+storyName+'.json'))
-        var story = JSON.parse(fs.readFileSync('story/basic.json'))
+        // var story = JSON.parse(fs.readFileSync('story/basic.json'))
 
         var scene=new THREE.Scene();
         var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight,0.1, 2000 );
@@ -31,7 +31,7 @@ var Compaign=( function(){
         scene.add(peoples)
         story.cha.forEach(function(doll){
             var cha=new Character(doll.name,doll.position,doll.carr,doll.camp)
-            // add camp data to character
+            // add type data to character
             cha.type="decorate"
             story.attend.forEach(function(player){
                 if(player.camp==cha.camp){cha.type=player.type}
@@ -79,12 +79,18 @@ var Compaign=( function(){
             })
             return tile
         }
+        scene.probe=function(position){
+            var haveMan=scene.whoIsThere(position)
+            if(haveMan==attend[scene.trend].control){haveMan=undefined}
+            var haveObj=scene.whaIsThere(position)
+            return haveMan!=undefined||haveObj!=undefined
+        }
         // do the operator -------------------------
         scene.execute=function(operators){
             operators.forEach(function(oper){
                 peoples.children.forEach(function(man){
-                    if(man.position.equals(oper.position)&& man.type!="decorate"){
-                        man.health-=oper.damage
+                    if(man.position.equals(oper.aim)&& man.type!="decorate"){
+                        man.influ(oper.effect)
                         man.todo('beaten',1)
                     }
                 })
@@ -94,10 +100,6 @@ var Compaign=( function(){
         // make token for each palyer ----------------------------
         var attend=story.attend
         attend.forEach(function(player){
-            // peoples.children.forEach(function(man){
-            //     if(man.camp==player.camp)
-            //     player.control=man
-            // })
             new MTLLoader()
                 .setPath( './marks/' )
                 .load( 'token-R.mtl', function ( materials ) {
@@ -116,7 +118,7 @@ var Compaign=( function(){
         // ------------------------------
         scene.round=1
         scene.trend=0
-        scene.getInput=function(num,comm,focusMan){ // num = player nymber
+        scene.getInput=function(num,key,focusMan){ // num = player nymber
             // check the trend is on you
             if(num!=scene.trend){
                 return "the trend is not on you"
@@ -145,10 +147,29 @@ var Compaign=( function(){
                 return "character is still running"
             }
 
-            // do commend release and run operator 
-            var operators=attend[scene.trend].control.doSingleCommand(comm)
-            if(operators){scene.execute(operators)}
-            
+            // check commend include 
+            var goal=attend[scene.trend].control.goal(key)
+            if(!goal){
+                return "command Unrecognizable"
+            }
+            attend[scene.trend].control.record=key+attend[scene.trend].control.record
+            console.log(attend[scene.trend].control.record.indexOf('xww'))
+
+            // do commend release and run operator
+            if(scene.probe(goal)){
+                attend[scene.trend].control.todo('beaten',1)
+                attend[scene.trend].control.stamina-=1
+            }else{
+                var operators=attend[scene.trend].control.doSingleCommand(key)
+                if(operators){scene.execute(operators)}
+            }
+
+            // collecting compaign information
+            var states=''
+            peoples.children.forEach(function(man){
+                states+=man.getStates()
+            })
+
             // present player finish 
             if(attend[scene.trend].control.stamina<=0){
                 attend[scene.trend].control=undefined
@@ -157,12 +178,6 @@ var Compaign=( function(){
                 scene.trend+=1
                 if(scene.trend>=attend.length){scene.trend=0;scene.round+=1}
             }
-
-            // collecting compaign information
-            var states=''
-            peoples.children.forEach(function(man){
-                states+=man.getStates()
-            })
 
             // check all people is tired 
             var endround=true

@@ -1,5 +1,5 @@
 {
-    "career":"Recruit",
+    "career":"Archer",
     "species":"female",
     "health":10,
     "stamina":3,
@@ -7,29 +7,33 @@
     "signs":["sidebun","sidescarf"],
     "gears":[["bow","43"]],
     "orders":[
-        {"key":"w","action":"walk","consume":1},
-        {"key":"a","action":"turnLeft","consume":1},
-        {"key":"d","action":"turnRigh","consume":1},
-        {"key":"z","action":"spur","consume":1},
-        {"key":"x","action":"hack","consume":1},
-        {"key":"c","action":"swep","consume":1}
+        {"key":"w","consume":1,"differ":{"x":0,"y":0,"z":1,"d": 0,"s":-1},"action":"walk"},
+        {"key":"a","consume":1,"differ":{"x":0,"y":0,"z":0,"d": 1,"s":-1},"action":"turnLeft"},
+        {"key":"d","consume":1,"differ":{"x":0,"y":0,"z":0,"d":-1,"s":-1},"action":"turnRigh"},
+        {"key":"x","consume":1,"differ":{"x":0,"y":0,"z":0,"d": 0,"s":-1},"action":"hack"}
     ],
     "skills":[
-        {"name":"hack",
+        {
+            "name":"spur",
+            "command":"xww",
             "operator":[
-                {"position":{"x": 0,"y":0,"z": 1,"d":0},"damage":1}
+                {"aim":{"x": 0,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}}
             ]
         },
-        {"name":"swep",
+        {
+            "name":"swep",
+            "command":"xd",
             "operator":[
-                {"position":{"x": 1,"y":0,"z": 1,"d":0},"damage":1},
-                {"position":{"x": 0,"y":0,"z": 1,"d":0},"damage":1},
-                {"position":{"x":-1,"y":0,"z": 1,"d":0},"damage":1}
+                {"aim":{"x": 1,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}},
+                {"aim":{"x": 0,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}},
+                {"aim":{"x":-1,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}}
             ]
         },
-        {"name":"spur",
+        {
+            "name":"hack",
+            "command":"x",
             "operator":[
-                {"position":{"x": 0,"y":0,"z": 1,"d":0},"damage":1}
+                {"aim":{"x": 0,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}}
             ]
         }
     ]
