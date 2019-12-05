@@ -10,7 +10,7 @@ var Compaign=( function(){
     function Compaign(storyName){
         var fs=require('fs')
         var story = JSON.parse(fs.readFileSync('story/'+storyName+'.json'))
-        // var story = JSON.parse(fs.readFileSync('story/basic.json'))
+        var story = JSON.parse(fs.readFileSync('story/basic.json'))
 
         var scene=new THREE.Scene();
         var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight,0.1, 2000 );
@@ -21,6 +21,7 @@ var Compaign=( function(){
         // environment light
         var ambientLight = new THREE.AmbientLight( 0xcccccc, 1);
         scene.add( ambientLight );
+        var underControl
         // ------------------------------------
         // add ground by map
         var terrain=new Territory(story.map)
@@ -81,7 +82,7 @@ var Compaign=( function(){
         }
         scene.probe=function(position){
             var haveMan=scene.whoIsThere(position)
-            if(haveMan==attend[scene.trend].control){haveMan=undefined}
+            if(haveMan==underControl){haveMan=undefined}
             var haveObj=scene.whaIsThere(position)
             return haveMan!=undefined||haveObj!=undefined
         }
@@ -115,6 +116,20 @@ var Compaign=( function(){
                         });
                 });
         })
+
+        scene.countRemain=function(){
+            scene.attend.forEach(function(player){
+                player.vigor=0
+                player.alive=0
+                scene.peoples.children.forEach(function(man){
+                    if(player.camp==man.camp){
+                        if(man.stamina>0 && man.health>0){player.vigor+=1}
+                        if(man.health>0) {player.alive+=1}
+                    }
+                })
+            })
+        }
+
         // ------------------------------
         scene.round=1
         scene.trend=0
@@ -124,7 +139,7 @@ var Compaign=( function(){
                 return "the trend is not on you"
             }
             // begining of one trend no one in control
-            if(attend[scene.trend].control==undefined){
+            if(underControl==undefined){
 
                 if(focusMan==undefined){
                     return "don't know who you want to control"
@@ -138,29 +153,42 @@ var Compaign=( function(){
                     return "the character is tired"
                 }
 
-                attend[scene.trend].control=focusMan
-                attend[scene.trend].control.markSpace.add(attend[scene.trend].token)
+                underControl=focusMan
+                underControl.markSpace.add(attend[scene.trend].token)
                 attend[scene.trend].token.visible=true
             }
+            //
+            var goal=underControl.goal(key)
+            if(key=='Escape'){
+                underControl.stamina=0
+                underControl.showMarks()
+                goal=1
+                
+                // return 'wants to stop move'
+            }
+
             // animation playing
-            if(attend[scene.trend].control.running){
+            if(underControl.running){
                 return "character is still running"
             }
 
             // check commend include 
-            var goal=attend[scene.trend].control.goal(key)
             if(!goal){
                 return "command Unrecognizable"
             }
-            attend[scene.trend].control.record=key+attend[scene.trend].control.record
-            console.log(attend[scene.trend].control.record.indexOf('xww'))
+            
+            // check stamina enough to do order 
+            if(!underControl.enoughTo(key)){
+                return "character stamina not enough do this command"
+            }
 
+            underControl.record=key+underControl.record
             // do commend release and run operator
             if(scene.probe(goal)){
-                attend[scene.trend].control.todo('beaten',1)
-                attend[scene.trend].control.stamina-=1
+                underControl.todo('beaten',1)
+                underControl.stamina-=1
             }else{
-                var operators=attend[scene.trend].control.doSingleCommand(key)
+                var operators=underControl.doSingleOrder(key)
                 if(operators){scene.execute(operators)}
             }
 
@@ -171,28 +199,35 @@ var Compaign=( function(){
             })
 
             // present player finish 
-            if(attend[scene.trend].control.stamina<=0){
-                attend[scene.trend].control=undefined
+            var endround=true
+            console.log(underControl.stamina)
+            if(underControl.stamina<=0){
+                underControl.record=''
+                underControl=undefined
                 attend[scene.trend].token.visible=false
                 scene.add(attend[scene.trend].token)
-                scene.trend+=1
-                if(scene.trend>=attend.length){scene.trend=0;scene.round+=1}
-            }
-
-            // check all people is tired 
-            var endround=true
-
-            scene.peoples.children.forEach(function(man){
-                if(man.type!="decorate" && man.stamina>0){endround=false}
-            })
-            if(endround){
-                scene.round+=1
-                scene.peoples.children.forEach(function(man){
-                    man.stamina=man.maxStamina
-                    man.showMarks()
+                // count vigor and alive people remain
+                scene.countRemain()
+                // if all team vigor zero 
+                scene.attend.forEach( function(player){
+                    if(player.vigor>0){endround=false}
                 })
+                if(endround){
+                    scene.round+=1
+                    scene.peoples.children.forEach(function(man){
+                        man.stamina=man.maxStamina
+                        man.showMarks()
+                    })
+                }
+                scene.countRemain()
+                // to next player
+                for(var i=0;i<attend.length;i++){
+                    scene.trend+=1
+                    if(scene.trend==attend.length){scene.trend=0}
+                    if(scene.attend[scene.trend].vigor>0){break;}
+                }
             }
-
+            
             return states
         }
         // ------------------------------

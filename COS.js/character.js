@@ -249,6 +249,7 @@ var Character=( function(){
 							alter.actions['dead'].paused=true
 							alter.markSpace.visible=false
 							alter.visible=false
+							alter.position.set(-1,-1,-1)
 						},1000)
 					}
 				},1000)
@@ -378,19 +379,45 @@ var Character=( function(){
 		}	
 
 		// character commands-------------------------
-		trunk.doSingleCommand=function(command,callback){
+		trunk.enoughTo=function(key){
+			var alter = this
+			var enoughOrNot=true
+			careerData.orders.forEach(function(ord){
+				if(ord.key==key){
+					// console.log(alter.stamina<-ord.differ.s)
+					if(alter.stamina<-ord.differ.s){
+						enoughOrNot=false
+					}
+				}
+			})
+			return enoughOrNot 
+		}
+
+		trunk.doSingleOrder=function(key){
 			var alter=this
 			var operators
-				careerData.orders.forEach(function(ord){
-					
-					if(ord.key==command){
-						alter.stamina+=ord.differ.s
-						alter.move(ord.differ)             
-						alter.todo(ord.action)
-						operators=alter.cast(ord.action)
-					}
-				})
-			return operators
+			// consume stamina first
+			careerData.orders.forEach(function(ord){
+				if(ord.key==key){
+					alter.stamina+=ord.differ.s
+				}
+			})
+
+			for(var i=0;i<careerData.skills.length;i++){
+				if(alter.record.indexOf(careerData.skills[i].command)==0){
+					alter.todo(careerData.skills[i].name)
+					operators=alter.cast(careerData.skills[i].name)
+					break;
+				}
+			}
+			if(operators){return operators}
+
+			careerData.orders.forEach(function(ord){
+				if(ord.key==key){
+					alter.move(ord.differ)
+					alter.todo(ord.action)
+				}
+			})
 		}
 		return trunk
 	}
