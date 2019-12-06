@@ -7,10 +7,10 @@
     "signs":["midbun","scarf"],
     "gears":[["sword","53"]],
     "orders":[
-        {"key":"w","consume":1,"differ":{"x":0,"y":0,"z":1,"d": 0,"s":-1},"action":"walk"},
-        {"key":"a","consume":1,"differ":{"x":0,"y":0,"z":0,"d": 1,"s":-1},"action":"turnLeft"},
-        {"key":"d","consume":1,"differ":{"x":0,"y":0,"z":0,"d":-1,"s":-1},"action":"turnRigh"},
-        {"key":"x","consume":1,"differ":{"x":0,"y":0,"z":0,"d": 0,"s":-2},"action":"hack"}
+        {"key":"w","consume":1,"differ":{"x":0,"y":0,"z":1,"d": 0,"s":-1},"name":"walk"},
+        {"key":"a","consume":1,"differ":{"x":0,"y":0,"z":0,"d": 1,"s":-1},"name":"turnLeft"},
+        {"key":"d","consume":1,"differ":{"x":0,"y":0,"z":0,"d":-1,"s":-1},"name":"turnRigh"},
+        {"key":"x","consume":1,"differ":{"x":0,"y":0,"z":0,"d": 0,"s":-2},"name":"hack"}
     ],
     "skills":[
         {

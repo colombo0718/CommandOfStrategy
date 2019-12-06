@@ -133,7 +133,7 @@ var Compaign=( function(){
         // ------------------------------
         scene.round=1
         scene.trend=0
-        scene.getInput=function(num,key,focusMan){ // num = player nymber
+        scene.getSingleInput=function(num,key,focusMan){ // num = player nymber
             // check the trend is on you
             if(num!=scene.trend){
                 return "the trend is not on you"
@@ -168,9 +168,9 @@ var Compaign=( function(){
             }
 
             // animation playing
-            if(underControl.running){
-                return "character is still running"
-            }
+            // if(underControl.running){
+            //     return "character is still running"
+            // }
 
             // check commend include 
             if(!goal){

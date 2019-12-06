@@ -396,10 +396,13 @@ var Character=( function(){
 		trunk.doSingleOrder=function(key){
 			var alter=this
 			var operators
+			var action 
 			// consume stamina first
 			careerData.orders.forEach(function(ord){
 				if(ord.key==key){
 					alter.stamina+=ord.differ.s
+					action=ord.name
+					alter.move(ord.differ)
 				}
 			})
 
@@ -412,12 +415,13 @@ var Character=( function(){
 			}
 			if(operators){return operators}
 
-			careerData.orders.forEach(function(ord){
-				if(ord.key==key){
-					alter.move(ord.differ)
-					alter.todo(ord.action)
-				}
-			})
+			alter.todo(action)
+			// careerData.orders.forEach(function(ord){
+			// 	if(ord.key==key){
+			// 		// alter.move(ord.differ)
+			// 		alter.todo(ord.name)
+			// 	}
+			// })
 		}
 		return trunk
 	}
