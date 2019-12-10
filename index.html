@@ -16,7 +16,11 @@
             <p>== 地 ==</p>
                 <p>地形：砂土</p><br>
             <p>== 人 ==</p>
-                <p>職業：步卒</p><br>
+                <p>職業：<font id='career'></font></p>
+                <p>姓名：<font id='name'></font></p>
+                <p>位置：<font id='posit'></font></p>
+                <p>命令：<font id='orders'></font></p>
+                <p>技能：<font id='skills'></font></p>
             <span>
             <p><button>W</button>：前進</p>
             <p><button>D</button>：右轉</p>
@@ -25,6 +29,8 @@
             </span>
             <p>== 物 ==</p><p>品項：火炬</p>
         </div>
+
+
         <div id="dial" class="ui"><h4>[對話]</h4>
             <p>主帥：對戰開始</p>
             <p style="position:absolute; bottom:0px; width:100%; font-weight:bold;">
@@ -110,6 +116,18 @@
                         if(focusMan){focusMan.hideSeletor()}
                         focusMan=epic.whoIsThere(TouchPosi.position)
                         focusMan.showSeletor(0xff00ff)
+                        console.log(focusMan)
+                        document.getElementById('career').innerHTML=focusMan.career
+                        document.getElementById('name').innerHTML=focusMan.name
+                        document.getElementById('posit').innerHTML=focusMan.position.toArray()
+                        document.getElementById('orders').innerHTML='<br>'
+                        focusMan.orders.forEach(function(ord){
+                            document.getElementById('orders').innerHTML+="["+ord.key+"]-"+ord.name+'<br>'
+                        })
+                        document.getElementById('skills').innerHTML='<br>'
+                        focusMan.skills.forEach(function(ski){
+                            document.getElementById('skills').innerHTML+="["+ski.command+"]-"+ski.name+'<br>'
+                        })
                     }
                     if(epic.whaIsThere(TouchPosi.position)){
                         if(focusObj){focusObj.hideSeletor()}

@@ -25,6 +25,8 @@ var Character=( function(){
 		trunk.stamina=careerData.stamina
 		trunk.weight=careerData.weight
 		trunk.signs=careerData.signs
+		trunk.orders=careerData.orders
+		trunk.skills=careerData.skills
 
 		// show file in directory 
 		// fs.readdir("./career/",function(err,files){console.log(files)})
