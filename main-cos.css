@@ -20,7 +20,7 @@ button{
     box-sizing: border-box;
     padding:2px 4px;
     font-family: Monospace;
-    cursor: pointer;
+    /* cursor: pointer; */
     font-weight:bold;
 }
 
@@ -51,6 +51,10 @@ button{
     height:30%;
     left:0%;
     top:70%;
+}
+#logs{
+    height:75%;
+    overflow:hidden;
 }
 input{
     width:80%;

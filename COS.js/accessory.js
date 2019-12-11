@@ -4,7 +4,7 @@ import { OBJLoader } from './three.js/OBJLoader.js';
 
 var Accessory=( function(){
 	// console.log(Group)
-	function Accessory(name,position,type){
+	function Accessory(name,position){
 				
         var thing=new THREE.Group(); 
         thing.name=name
@@ -13,18 +13,18 @@ var Accessory=( function(){
         
         new MTLLoader()
         .setPath( './goods/' )
-        .load( type+'.mtl', function ( materials ) {
+        .load( name+'.mtl', function ( materials ) {
             // materials.preload();
             new OBJLoader()
                 .setMaterials( materials )
                 .setPath( './goods/' )
-                .load( type+'.obj', function ( object ) {
+                .load( name+'.obj', function ( object ) {
                     thing.rotateY( Math.PI/2*position.d)
                     thing.add(object)
                 });
 
         } );
-        if(type=="torch"){
+        if(name=="torch"){
             var pointLight = new THREE.PointLight( 0xffffff, .3);
             pointLight.position.set(0,1.5,0)
             thing.add( pointLight );

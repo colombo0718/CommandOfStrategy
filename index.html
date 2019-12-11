@@ -11,28 +11,28 @@
 	<body>
         <div id="cont"></div>
         <div id="info" class="ui"><h4>[資訊]</h4>
-            <p>== 天 ==</p>
+            <br><p>== 天 ==</p>
                 <p>局勢：藍軍<br>時辰：卯時<br>天氣：晴朗</p><br>
-            <p>== 地 ==</p>
-                <p>地形：砂土</p><br>
-            <p>== 人 ==</p>
+            <br><p>== 地 ==</p>
+                <p>地質：<font id='gnd-name'></font></p>
+                <p>位置：<font id='gnd-posi'></font></p>
+            <br><p>== 人 ==</p>
                 <p>職業：<font id='career'></font></p>
-                <p>姓名：<font id='name'></font></p>
-                <p>位置：<font id='posit'></font></p>
+                <p>姓名：<font id='cha-name'></font></p>
+                <p>位置：<font id='cha-posi'></font></p>
+                <p>血量：<font id='health'></font></p>
+                <p>體力：<font id='stamina'></font></p>
                 <p>命令：<font id='orders'></font></p>
                 <p>技能：<font id='skills'></font></p>
-            <span>
-            <p><button>W</button>：前進</p>
-            <p><button>D</button>：右轉</p>
-            <p><button>A</button>：左轉</p>
-            <p><button id='commandButton'>X</button>：攻擊</p><br>
-            </span>
-            <p>== 物 ==</p><p>品項：火炬</p>
+            
+            <br><p>== 物 ==</p>
+                <p>品項：<font id='obj-name'></font></p>
+                <p>位置：<font id='obj-posi'></font></p>
         </div>
 
 
-        <div id="dial" class="ui"><h4>[對話]</h4>
-            <p>主帥：對戰開始</p>
+        <div id="dial" class="ui" ><h4>[對話]</h4>
+            <p><div id='logs'>主帥：對戰開始<br></div></p>
             <p style="position:absolute; bottom:0px; width:100%; font-weight:bold;">
                 指令:<input type="text" id='inputArea'>
                 <button>Enter</button>
@@ -51,12 +51,12 @@
             var epic = new Compaign('train')  
             var inputAreaFocus=false
 
-            document.getElementById("commandButton").addEventListener(
-                'click',function(){
-                    console.log(this.innerHTML)
-                    commandLine.value+=this.innerHTML
-                }
-            )            
+            // document.getElementById("commandButton").addEventListener(
+            //     'click',function(){
+            //         console.log(this.innerHTML)
+            //         commandLine.value+=this.innerHTML
+            //     }
+            // )            
 
 			function init() {
                 // renderer
@@ -111,28 +111,36 @@
                         if(focusGnd){focusGnd.hideSeletor()}
                         focusGnd=epic.howIsThere(TouchPosi.position)
                         focusGnd.showSeletor(0xffff00)
+                        // console.log(focusGnd.name)
+                        document.getElementById('gnd-name').innerHTML=focusGnd.name
+                        document.getElementById('gnd-posi').innerHTML=focusGnd.position.toArray()
                     }
                     if(epic.whoIsThere(TouchPosi.position)){
                         if(focusMan){focusMan.hideSeletor()}
                         focusMan=epic.whoIsThere(TouchPosi.position)
                         focusMan.showSeletor(0xff00ff)
-                        console.log(focusMan)
+                        // console.log(focusMan)
                         document.getElementById('career').innerHTML=focusMan.career
-                        document.getElementById('name').innerHTML=focusMan.name
-                        document.getElementById('posit').innerHTML=focusMan.position.toArray()
+                        document.getElementById('cha-name').innerHTML=focusMan.name
+                        document.getElementById('cha-posi').innerHTML=focusMan.position.toArray()
+                        document.getElementById('health').innerHTML=focusMan.health
+                        document.getElementById('stamina').innerHTML=focusMan.stamina
                         document.getElementById('orders').innerHTML='<br>'
                         focusMan.orders.forEach(function(ord){
-                            document.getElementById('orders').innerHTML+="["+ord.key+"]-"+ord.name+'<br>'
+                            document.getElementById('orders').innerHTML+="<button>"+ord.key+"</button>-"+ord.name+'<br>'
                         })
                         document.getElementById('skills').innerHTML='<br>'
                         focusMan.skills.forEach(function(ski){
-                            document.getElementById('skills').innerHTML+="["+ski.command+"]-"+ski.name+'<br>'
+                            document.getElementById('skills').innerHTML+="<button>"+ski.command+"</button>-"+ski.name+'<br>'
                         })
                     }
                     if(epic.whaIsThere(TouchPosi.position)){
                         if(focusObj){focusObj.hideSeletor()}
                         focusObj=epic.whaIsThere(TouchPosi.position)
                         focusObj.showSeletor(0x00ffff)
+                        // console.log(focusObj)
+                        document.getElementById('obj-name').innerHTML=focusObj.name
+                        document.getElementById('obj-posi').innerHTML=focusObj.position.toArray()
                     }
                 }
             }
@@ -145,8 +153,14 @@
 
             function onKeyPress(event){
                 if(!inputAreaFocus){
-                    var state=epic.getSingleInput(epic.trend,event.key,focusMan)
-                    console.log(state)
+                    epic.getSingleInput(epic.trend,event.key,focusMan)
+                    if(epic.error){
+                        document.getElementById('logs').innerHTML
+                        ="主帥:"+epic.error+"<br>"
+                        +document.getElementById('logs').innerHTML
+                        console.log(epic.error)
+                    }
+                    else{console.log(epic.getChaStates())}
                 }
                 
                 

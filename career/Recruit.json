@@ -2,7 +2,7 @@
     "career":"Recruit",
     "species":"male",
     "health":10,
-    "stamina":3,
+    "stamina":5,
     "weight":2,
     "signs":["midbun","scarf"],
     "gears":[["sword","53"]],

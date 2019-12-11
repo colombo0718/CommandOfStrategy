@@ -231,6 +231,7 @@ var Character=( function(){
 
 		trunk.todo=function(name,keep){
 			var alter=this
+			// console.log(name)
 			alter.actions[alter.doing].setEffectiveWeight(0).play()
 			alter.actions[name].setEffectiveWeight(0).reset()
 			alter.actions[name].setEffectiveWeight(1).play()
@@ -400,6 +401,7 @@ var Character=( function(){
 			var operators
 			var action 
 			// consume stamina first
+			if(key.length>1){return}
 			careerData.orders.forEach(function(ord){
 				if(ord.key==key){
 					alter.stamina+=ord.differ.s

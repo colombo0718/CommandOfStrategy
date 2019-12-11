@@ -80,12 +80,24 @@ var Compaign=( function(){
             })
             return tile
         }
+        // test something here
         scene.probe=function(position){
             var haveMan=scene.whoIsThere(position)
             if(haveMan==underControl){haveMan=undefined}
             var haveObj=scene.whaIsThere(position)
             return haveMan!=undefined||haveObj!=undefined
         }
+
+        // get present states ------------------------
+        scene.getChaStates=function(){
+            var states=''
+            peoples.children.forEach(function(man){
+                states+=man.getStates()
+            })
+            return states
+        }
+        scene.getObjStates=function(){}
+
         // do the operator -------------------------
         scene.execute=function(operators){
             operators.forEach(function(oper){
@@ -135,22 +147,27 @@ var Compaign=( function(){
         scene.trend=0
         scene.getSingleInput=function(num,key,focusMan){ // num = player nymber
             // check the trend is on you
+            scene.error=''
             if(num!=scene.trend){
-                return "the trend is not on you"
+                scene.error="the trend is not on you"
+                return
             }
             // begining of one trend no one in control
             if(underControl==undefined){
 
                 if(focusMan==undefined){
-                    return "don't know who you want to control"
+                    scene.error="don't know who you want to control"
+                    return
                 }
 
                 if(focusMan.camp!=attend[scene.trend].camp){
-                    return "you can't control this character"
+                    scene.error="you can't control this character"
+                    return
                 }
 
                 if(focusMan.stamina==0){
-                    return "the character is tired"
+                    scene.error="the character is tired"
+                    return
                 }
 
                 underControl=focusMan
@@ -174,17 +191,20 @@ var Compaign=( function(){
 
             // check commend include 
             if(!goal){
-                return "command Unrecognizable"
+                scene.error="command Unrecognizable"
+                return
             }
             
             // check stamina enough to do order 
             if(!underControl.enoughTo(key)){
-                return "character stamina not enough do this command"
+                scene.error="character stamina not enough do this command"
+                return
             }
 
             underControl.record=key+underControl.record
             // do commend release and run operator
             if(scene.probe(goal)){
+                // can't go forward 
                 underControl.todo('beaten',1)
                 underControl.stamina-=1
             }else{
@@ -200,7 +220,6 @@ var Compaign=( function(){
 
             // present player finish 
             var endround=true
-            console.log(underControl.stamina)
             if(underControl.stamina<=0){
                 underControl.record=''
                 underControl=undefined

@@ -41,6 +41,7 @@ var Territory=( function(){
                         .setMaterials( materials )
                         .setPath( './tiles/' )
                         .load( name+'.obj', function ( tile ) {
+                            tile.name=name
                             tile.scale.set(.25,.25,.25)
                             tile.position.x=i
                             tile.position.z=j
