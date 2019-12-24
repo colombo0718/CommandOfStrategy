@@ -153,7 +153,7 @@
 
             function onKeyPress(event){
                 if(!inputAreaFocus){
-                    epic.getSingleInput(epic.trend,event.key,focusMan)
+                    epic.getSingleInput(0,event.key,focusMan)
                     if(epic.error){
                         document.getElementById('logs').innerHTML
                         ="主帥:"+epic.error+"<br>"
@@ -161,10 +161,25 @@
                         console.log(epic.error)
                     }
                     else{console.log(epic.getChaStates())}
-                }
-                
-                
+                }               
             }
+
+            setInterval(function(){
+                // if(epic.trend==1){
+                    if(epic.underControl){
+                        var rand=Math.floor(Math.random()*epic.underControl.orders.length)
+                        console.log(epic.underControl.orders[rand].key)
+                        epic.getSingleInput(epic.trend,epic.underControl.orders[rand].key,focusMan)
+                    }else{
+                        var rand=Math.floor(Math.random()*epic.attend[epic.trend].chars.length)
+                            if(epic.attend[epic.trend].chars[rand].stamina>0){
+                                epic.underControl=epic.attend[epic.trend].chars[rand]
+                                return
+                            }
+                        
+                    }
+                // }
+            },500)
 
 			function animate() {				
                 var delta = clock.getDelta();            

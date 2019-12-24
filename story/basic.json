@@ -32,10 +32,10 @@
     ],
     "cha":[
         {"name":"Gf1","position":{"x":14,"y":0,"z":4,"d":-1},"carr":"Recruit","camp":"G"},
-        {"name":"Gf2","position":{"x":15,"y":0,"z":5,"d":-1},"carr":"Archer", "camp":"G"},
+        {"name":"Gf2","position":{"x":15,"y":0,"z":5,"d":-1},"carr":"Recruit", "camp":"G"},
         {"name":"Gf3","position":{"x":14,"y":0,"z":6,"d":-1},"carr":"Recruit","camp":"G"},
         {"name":"Wf1","position":{"x": 6,"y":0,"z":4,"d": 1},"carr":"Recruit","camp":"W"},
-        {"name":"Wf2","position":{"x": 5,"y":0,"z":5,"d": 1},"carr":"Archer", "camp":"W"},
+        {"name":"Wf2","position":{"x": 5,"y":0,"z":5,"d": 1},"carr":"Recruit", "camp":"W"},
         {"name":"Wf3","position":{"x": 6,"y":0,"z":6,"d": 1},"carr":"Recruit","camp":"W"},
         {"name":"Ra","position":{"x": 10,"y":0.5,"z":11,"d":2},"carr":"Admiral","camp":"R"}
     ]   

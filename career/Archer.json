@@ -7,10 +7,12 @@
     "signs":["sidebun","sidescarf"],
     "gears":[["bow","43"]],
     "orders":[
-        {"key":"w","consume":1,"differ":{"x":0,"y":0,"z":1,"d": 0,"s":-1},"name":"walk"},
-        {"key":"a","consume":1,"differ":{"x":0,"y":0,"z":0,"d": 1,"s":-1},"name":"turnLeft"},
-        {"key":"d","consume":1,"differ":{"x":0,"y":0,"z":0,"d":-1,"s":-1},"name":"turnRigh"},
-        {"key":"x","consume":1,"differ":{"x":0,"y":0,"z":0,"d": 0,"s":-1},"name":"hack"}
+        {"key":"w","consume":1,"differ":{"x": 0,"y":0,"z":1,"d": 0,"s":-1},"name":"walk"},
+        {"key":"a","consume":1,"differ":{"x": 0,"y":0,"z":0,"d": 1,"s":-1},"name":"turnLeft"},
+        {"key":"d","consume":1,"differ":{"x": 0,"y":0,"z":0,"d":-1,"s":-1},"name":"turnRigh"},
+        {"key":"q","consume":1,"differ":{"x": 1,"y":0,"z":0,"d": 0,"s":-1},"name":"sideLeft"},
+        {"key":"e","consume":1,"differ":{"x":-1,"y":0,"z":0,"d": 0,"s":-1},"name":"sideRigh"},
+        {"key":"x","consume":1,"differ":{"x": 0,"y":0,"z":0,"d": 0,"s":-1},"name":"hack"}
     ],
     "skills":[
         {

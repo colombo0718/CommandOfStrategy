@@ -21,7 +21,7 @@ var Compaign=( function(){
         // environment light
         var ambientLight = new THREE.AmbientLight( 0xcccccc, 1);
         scene.add( ambientLight );
-        var underControl
+        scene.underControl=undefined
         // ------------------------------------
         // add ground by map
         var terrain=new Territory(story.map)
@@ -83,7 +83,7 @@ var Compaign=( function(){
         // test something here
         scene.probe=function(position){
             var haveMan=scene.whoIsThere(position)
-            if(haveMan==underControl){haveMan=undefined}
+            if(haveMan==scene.underControl){haveMan=undefined}
             var haveObj=scene.whaIsThere(position)
             return haveMan!=undefined||haveObj!=undefined
         }
@@ -129,6 +129,18 @@ var Compaign=( function(){
                 });
         })
 
+        attend.forEach(function(player){
+            player.chars=[]
+            peoples.children.forEach(function(char){
+                if(char.camp==player.camp){
+                    player.chars.push(char)
+                }
+            })
+            console.log(player.chars)
+        })
+
+
+
         scene.countRemain=function(){
             scene.attend.forEach(function(player){
                 player.vigor=0
@@ -153,7 +165,7 @@ var Compaign=( function(){
                 return
             }
             // begining of one trend no one in control
-            if(underControl==undefined){
+            if(scene.underControl==undefined){
 
                 if(focusMan==undefined){
                     scene.error="don't know who you want to control"
@@ -169,25 +181,27 @@ var Compaign=( function(){
                     scene.error="the character is tired"
                     return
                 }
-
-                underControl=focusMan
-                underControl.markSpace.add(attend[scene.trend].token)
+                console.log(focusMan)
+                scene.underControl=focusMan
+                scene.underControl.markSpace.add(attend[scene.trend].token)
                 attend[scene.trend].token.visible=true
             }
-            //
-            var goal=underControl.goal(key)
+            // get where character want to go 
+            console.log(scene.underControl)
+            var goal=scene.underControl.goal(key)
             if(key=='Escape'){
-                underControl.stamina=0
-                underControl.showMarks()
+                scene.underControl.stamina=0
+                scene.underControl.showMarks()
                 goal=1
                 
                 // return 'wants to stop move'
             }
 
             // animation playing
-            // if(underControl.running){
-            //     return "character is still running"
-            // }
+            if(scene.underControl.running){
+                scene.error="character is still running"
+                return
+            }
 
             // check commend include 
             if(!goal){
@@ -196,19 +210,19 @@ var Compaign=( function(){
             }
             
             // check stamina enough to do order 
-            if(!underControl.enoughTo(key)){
+            if(!scene.underControl.enoughTo(key)){
                 scene.error="character stamina not enough do this command"
                 return
             }
 
-            underControl.record=key+underControl.record
+            scene.underControl.record=key+scene.underControl.record
             // do commend release and run operator
             if(scene.probe(goal)){
                 // can't go forward 
-                underControl.todo('beaten',1)
-                underControl.stamina-=1
+                scene.underControl.todo('beaten',1)
+                scene.underControl.stamina-=1
             }else{
-                var operators=underControl.doSingleOrder(key)
+                var operators=scene.underControl.doSingleOrder(key)
                 if(operators){scene.execute(operators)}
             }
 
@@ -220,9 +234,9 @@ var Compaign=( function(){
 
             // present player finish 
             var endround=true
-            if(underControl.stamina<=0){
-                underControl.record=''
-                underControl=undefined
+            if(scene.underControl.stamina<=0){
+                scene.underControl.record=''
+                scene.underControl=undefined
                 attend[scene.trend].token.visible=false
                 scene.add(attend[scene.trend].token)
                 // count vigor and alive people remain
