@@ -46,8 +46,9 @@
         {"position":{"x": 6,"y":0,"z": 0,"d":1},"name":"torch"}
     ],
     "cha":[
-        {"name":"Bf1","position":{"x":3,"y":0,"z":2,"d":1},"carr":"Recruit","camp":"B"},
-        {"name":"Mf1","position":{"x":3,"y":0,"z":3,"d":1},"carr":"Recruit","camp":"M"},
-        {"name":"Mf2","position":{"x":4,"y":0,"z":3,"d":1},"carr":"Recruit","camp":"M"}
+        {"name":"Bf1","position":{"x":3,"y":0,"z":2,"d":1},"carr":"Archer","camp":"B"},
+        {"name":"Ba1","position":{"x":4,"y":0,"z":2,"d":1},"carr":"Archer","camp":"B"},
+        {"name":"Mf1","position":{"x":3,"y":0,"z":3,"d":1},"carr":"Archer","camp":"M"},
+        {"name":"Ma1","position":{"x":4,"y":0,"z":3,"d":1},"carr":"Archer","camp":"M"}
     ]   
 }

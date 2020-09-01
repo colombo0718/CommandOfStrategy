@@ -5,7 +5,7 @@
     "stamina":5,
     "weight":2,
     "signs":["sidebun","sidescarf"],
-    "gears":[["bow","43"]],
+    "gears":[["bow","43"],["arrow","43"]],
     "orders":[
         {"key":"w","consume":1,"differ":{"x": 0,"y":0,"z":1,"d": 0,"s":-1},"name":"walk"},
         {"key":"a","consume":1,"differ":{"x": 0,"y":0,"z":0,"d": 1,"s":-1},"name":"turnLeft"},
@@ -16,23 +16,7 @@
     ],
     "skills":[
         {
-            "name":"spur",
-            "command":"xww",
-            "operator":[
-                {"aim":{"x": 0,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}}
-            ]
-        },
-        {
-            "name":"swep",
-            "command":"xd",
-            "operator":[
-                {"aim":{"x": 1,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}},
-                {"aim":{"x": 0,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}},
-                {"aim":{"x":-1,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}}
-            ]
-        },
-        {
-            "name":"hack",
+            "name":"shot",
             "command":"x",
             "operator":[
                 {"aim":{"x": 0,"y":0,"z": 1,"d":0},"effect":{"x":0,"y":0,"z":1,"d": 0,"s":-1,"h":-1}}

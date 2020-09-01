@@ -210,7 +210,7 @@ var Character=( function(){
 		}
 
 		// actions ------------
-		var actionNames=['base','sway','beaten','walk','hack','sits','turnLeft','turnRigh','swep','spur','salute','dead']
+		var actionNames=['base','sway','beaten','walk','hack','sits','turnLeft','turnRigh','sideLeft','sideRigh','shot','swep','spur','salute','dead']
 
 		trunk.defaultAction="base"
 
@@ -255,7 +255,7 @@ var Character=( function(){
 							alter.position.set(-1,-1,-1)
 						},1000)
 					}
-				},1000)
+				},950)
 			}
 		}
 		//   feedback present states

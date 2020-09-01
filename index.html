@@ -48,7 +48,8 @@
             var clock = new THREE.Clock();
             var inputArea=document.getElementById("inputArea")
             var focusMan,focusObj,focusGnd,TouchPosi
-            var epic = new Compaign('train')  
+            // var epic = new Compaign('train')  
+            var epic = new Compaign('basic')  
             var inputAreaFocus=false
 
             // document.getElementById("commandButton").addEventListener(
@@ -153,7 +154,7 @@
 
             function onKeyPress(event){
                 if(!inputAreaFocus){
-                    epic.getSingleInput(0,event.key,focusMan)
+                    epic.getSingleInput(epic.trend,event.key,focusMan)
                     if(epic.error){
                         document.getElementById('logs').innerHTML
                         ="主帥:"+epic.error+"<br>"
@@ -164,22 +165,22 @@
                 }               
             }
 
-            setInterval(function(){
-                // if(epic.trend==1){
-                    if(epic.underControl){
-                        var rand=Math.floor(Math.random()*epic.underControl.orders.length)
-                        console.log(epic.underControl.orders[rand].key)
-                        epic.getSingleInput(epic.trend,epic.underControl.orders[rand].key,focusMan)
-                    }else{
-                        var rand=Math.floor(Math.random()*epic.attend[epic.trend].chars.length)
-                            if(epic.attend[epic.trend].chars[rand].stamina>0){
-                                epic.underControl=epic.attend[epic.trend].chars[rand]
-                                return
-                            }
+            // setInterval(function(){
+            //     // if(epic.trend==1){
+            //         if(epic.underControl){
+            //             var rand=Math.floor(Math.random()*epic.underControl.orders.length)
+            //             console.log(epic.underControl.orders[rand].key)
+            //             epic.getSingleInput(epic.trend,epic.underControl.orders[rand].key,focusMan)
+            //         }else{
+            //             var rand=Math.floor(Math.random()*epic.attend[epic.trend].chars.length)
+            //                 if(epic.attend[epic.trend].chars[rand].stamina>0){
+            //                     epic.underControl=epic.attend[epic.trend].chars[rand]
+            //                     return
+            //                 }
                         
-                    }
-                // }
-            },500)
+            //         }
+            //     // }
+            // },500)
 
 			function animate() {				
                 var delta = clock.getDelta();            
