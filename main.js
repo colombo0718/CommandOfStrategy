@@ -14,7 +14,6 @@ const checkImportRegex = /import(\s*{?\*?[\s\w,$]*}?\s*(as)?[\s\w]*from\s|[\s]*)
 let checkRelativeImportRegex = new RegExp("import(\\s*{?\\*?[\\s\\w,$]*}?\\s*(as)?[\\s\\w]*from\\s|[\\s]*)['\\\"]([\\.\\/][\\w\\/\\-@.]*?)['\\\"]", 'g');
 
 let createProtocol = (scheme, normalize = true) => {
-    console.log('ffdsafdsa')
     protocol.registerBufferProtocol(scheme,
         async (request, respond) => {
             let pathName = new URL(request.url).pathname;
@@ -152,8 +151,8 @@ async function createWindow() {
     win.webContents.openDevTools()
 
     // und Laden der index.html der App.
-    // win.loadFile('index.html')
-    win.loadFile('labs/addATile.html')
+    win.loadFile('index.html')
+    // win.loadFile('labs/addATile.html')
 
     // Ausgegeben, wenn das Fenster geschlossen wird.
     win.on('closed', () => {
