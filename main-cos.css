@@ -40,6 +40,12 @@ button{
     left:0%;
     top:0%;
 }
+#menu{
+    width:20%;
+    height:40%;
+    left:30%;
+    top:15%;
+}
 #info{
     width:20%;
     height:100%;

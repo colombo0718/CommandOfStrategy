@@ -10,6 +10,13 @@
 
 	<body>
         <div id="cont"></div>
+
+        <div id="menu" class="ui"> <h4>[選單]</h4>
+            <p>== 關卡 ==</p>
+            <p>== 實驗 ==</p>
+                <input type="button" value="lab01 - add a tile" onclick="window.location.href='labs/addATile.html'">
+        </div>
+
         <div id="info" class="ui"><h4>[資訊]</h4>
             <br><p>== 天 ==</p>
                 <p>局勢：藍軍<br>時辰：卯時<br>天氣：晴朗</p><br>
@@ -50,7 +57,7 @@
             var focusMan,focusObj,focusGnd,TouchPosi
             // var epic = new Compaign('train')  
             var epic = new Compaign('basic')  
-            var inputAreaFocus=false
+            var inputAreaFocus=false,showMenu=true
 
             // document.getElementById("commandButton").addEventListener(
             //     'click',function(){
@@ -153,6 +160,17 @@
             }
 
             function onKeyPress(event){
+                if(event.key=="Escape"){
+                    if(showMenu){
+                        document.getElementById('menu').style.top="-40%"
+                        showMenu=false
+                    }else{
+                        document.getElementById('menu').style.top="15%"
+                        showMenu=true
+                    }
+                    return
+                }
+
                 if(!inputAreaFocus){
                     epic.getSingleInput(epic.trend,event.key,focusMan)
                     if(epic.error){

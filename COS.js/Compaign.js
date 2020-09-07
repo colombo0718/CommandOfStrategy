@@ -207,7 +207,7 @@ var Compaign=( function(){
             // get where character want to go 
             console.log(scene.underControl)
             var goal=scene.underControl.goal(key)
-            if(key=='Escape'){
+            if(key=='Tab'){
                 scene.underControl.stamina=0
                 scene.underControl.showMarks()
                 goal=1
