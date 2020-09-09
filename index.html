@@ -13,6 +13,8 @@
 
         <div id="menu" class="ui"> <h4>[選單]</h4>
             <p>== 關卡 ==</p>
+            <button id='game1'>train</button><br>
+            <button id='game2'>basic</button><br>
         </div>
 
         <div id="info" class="ui"><h4>[資訊]</h4>
@@ -45,10 +47,7 @@
         </div>
         
 		<script type="module">
-            let {shell} = require('electron');
-            
             // three.js module
-            
 			import * as THREE from './COS.js/three.js/three.module.js';
             import { Compaign } from './COS.js/Compaign.js'; 
 
@@ -162,8 +161,7 @@
 
             function onKeyPress(event){
                 if(event.key=="Escape"){
-                    // console.log(shell)
-                    shell.openExternal('addATile.html')
+                    console.log(document.getElementById('game1'))
                     if(showMenu){
                         document.getElementById('menu').style.top="-40%"
                         showMenu=false
@@ -186,15 +184,19 @@
                 }               
             }
 
-            // var lab01 = document.getElementById('lab01');
+            document.getElementById('game1').addEventListener('click',function(){
+                epic= new Compaign('train')
+                document.getElementById('menu').style.top="-40%"
+                showMenu=false
+                
+            })
 
-            // lab01.onclick = function (e) {
-            //     console.log(lab01)
-            //     // 阻止預設事件
-            //     e.preventDefault();
-            //     // 通過 shell 開啟連結
-            //     shell.openExternal('./labs/addATile.html')
-            // }
+            document.getElementById('game2').addEventListener('click',function(){
+                epic= new Compaign('basic')
+                document.getElementById('menu').style.top="-40%"
+                showMenu=false
+            })
+
 
             // setInterval(function(){
             //     // if(epic.trend==1){
