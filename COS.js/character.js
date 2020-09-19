@@ -309,13 +309,13 @@ var Character=( function(){
 
 		// effects ---------------------------
 
-		var effectNames=['hack','swep','spur']
+		var effectNames=['hack','swep','spur','arrow']
 
 		trunk.effects=[]
 		effectNames.forEach(function(name){
 			new MTLLoader()
 				.setPath( './effects/' )
-				.load( 'hack.mtl', function ( materials ) {
+				.load( name+'.mtl', function ( materials ) {
 					materials.preload();
 					new OBJLoader()
 						.setMaterials( materials )
@@ -325,18 +325,23 @@ var Character=( function(){
 							object.visible=false
 							trunk.effects[name]=object
 							trunk.add(object);
+							if(name=='arrow'){
+								console.log('this is arrow')
+								setInterval(function(){object.position.y-=.5},10)
+							}
 						});
 
 				});
 		})
 
-		trunk.show=function(name,delay){
+		trunk.show=function(name,time){
 			var alter=this
-			if(!delay){delay=0}
+			alter.effects[name].visible=true
+			if(!time){time=1}
 			setTimeout(function(){
 				// console.log(alter.effects[name])
-				alter.effects[name].visible=true
-			},delay*1000)
+				alter.effects[name].visible=false
+			},time*1000)
 		}
 		trunk.hide=function(name,delay){
 			var alter=this
@@ -409,6 +414,13 @@ var Character=( function(){
 					alter.move(ord.differ)
 				}
 			})
+
+			// console.log()
+			if(this.career=='Archer' && key=='x'){
+				console.log(this.effects['arrow'].position.set(0,0,0))
+				console.log('shoting')
+				this.show('arrow')
+			}
 
 			for(var i=0;i<careerData.skills.length;i++){
 				if(alter.record.indexOf(careerData.skills[i].command)==0){

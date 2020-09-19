@@ -154,23 +154,23 @@ var Compaign=( function(){
             })
         }
         // ------------
-        // new MTLLoader()
-		// 		.setPath( './goods/' )
-		// 		.load( 'arrow.mtl', function ( materials ) {
-		// 			materials.preload();
-		// 			new OBJLoader()
-		// 				.setMaterials( materials )
-		// 				.setPath( './goods/' )
-		// 				.load( 'arrow.obj', function ( object ) {
-		// 					// object.rotateX(Math.PI/2)
-		// 					// object.visible=false
-        //                     // trunk.effects[name]=object
-        //                     object.position.set(1,1,1)
-        //                     object.scale.set(1./16,1./16,1./16)
-		// 					scene.add(object);
-		// 				});
+        new MTLLoader()
+				.setPath( './gears/' )
+				.load( 'arrow.mtl', function ( materials ) {
+					materials.preload();
+					new OBJLoader()
+						.setMaterials( materials )
+						.setPath( './gears/' )
+						.load( 'arrow.obj', function ( object ) {
+							// object.rotateX(Math.PI/2)
+							// object.visible=false
+                            // trunk.effects[name]=object
+                            object.position.set(1,1,1)
+                            object.scale.set(.25,.25,.25)
+							scene.add(object);
+						});
 
-		// 		});
+				});
 
         // ------------------------------
         scene.round=1
